@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Digital - Maria Rosario (Interactive Presentation & Grid View)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --navy-dark: #0A192F;
+            --navy-primary: #1E293B;
+            --navy-accent: #0F172A;
+            --teal-primary: #0D9488;
+            --teal-light: #14B8A6;
+            --teal-bg: #E6FFFA;
+            --bg-workspace: #E5E7EB;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #E2E8F0;
+            background-image: 
+                radial-gradient(#CBD5E1 1.2px, transparent 1.2px),
+                linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%);
+            background-size: 24px 24px, 100% 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Desk Accents */
+        .desk-accent-leaf-top {
+            position: fixed;
+            top: -20px;
+            right: -20px;
+            width: 170px;
+            height: 170px;
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .desk-accent-leaf-bottom {
+            position: fixed;
+            bottom: -20px;
+            left: -20px;
+            width: 190px;
+            height: 190px;
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: 1;
+            transform: rotate(90deg);
+        }
+
+        .desk-pen {
+            position: fixed;
+            left: 30px;
+            top: 35%;
+            width: 12px;
+            height: 230px;
+            background: linear-gradient(90deg, #334155, #0F172A, #475569);
+            border-radius: 6px;
+            box-shadow: 12px 12px 20px rgba(0,0,0,0.15);
+            transform: rotate(-12deg);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .desk-pen::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 20px solid #94A3B8;
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 25px;
+            z-index: 2;
+        }
+
+        .header-title h1 {
+            color: var(--navy-dark);
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .header-title p {
+            color: #475569;
+            font-size: 14px;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .instruction-bar {
+            background: rgba(13, 148, 136, 0.12);
+            border: 1px solid var(--teal-light);
+            color: var(--teal-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.1);
+        }
+
+        /* 3x2 Grid Container */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1400px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        @media (max-width: 1024px) {
+            .workspace-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .workspace-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Slide Card Component */
+        .slide-card {
+            background: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .slide-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: var(--teal-light);
+            box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.3);
+        }
+
+        /* Hover Overlay Indicator */
+        .hover-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            z-index: 10;
+        }
+
+        .slide-card:hover .hover-overlay {
+            opacity: 1;
+        }
+
+        .hover-overlay i {
+            font-size: 32px;
+            color: var(--teal-light);
+            margin-bottom: 8px;
+            transform: scale(0.8);
+            transition: transform 0.25s ease;
+        }
+
+        .slide-card:hover .hover-overlay i {
+            transform: scale(1);
+        }
+
+        .hover-overlay span {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: var(--teal-primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .slide-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            background: rgba(15, 23, 42, 0.1);
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            z-index: 5;
+        }
+
+        /* Header bar inside slides */
+        .slide-header {
+            background: var(--navy-accent);
+            color: #FFFFFF;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .slide-header h2 {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slide-header h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background: var(--teal-light);
+            border-radius: 2px;
+        }
+
+        .slide-body {
+            padding: 16px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: #1E293B;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* SLIDE 1: Cover */
+        .slide-1-content {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            height: 100%;
+            gap: 15px;
+        }
+
+        .slide-1-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0 10px 20px;
+        }
+
+        .slide-1-title h2 {
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--navy-dark);
+            line-height: 1.1;
+            letter-spacing: 1.5px;
+        }
+
+        .slide-1-title h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--teal-primary);
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .role-pill {
+            display: inline-block;
+            background: var(--navy-primary);
+            color: #FFFFFF;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .contact-item i {
+            color: var(--teal-primary);
+            width: 14px;
+            text-align: center;
+        }
+
+        .slide-1-right {
+            position: relative;
+            background: linear-gradient(135deg, var(--navy-dark), var(--navy-primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-bottom-left-radius: 40px;
+        }
+
+        .slide-1-photo {
+            width: 85%;
+            height: 90%;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 3px solid var(--teal-light);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        /* SLIDE 2: About Me */
+        .about-text {
+            color: #334155;
+            font-size: 11.5px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .highlight-card {
+            background: var(--teal-bg);
+            border: 1px solid rgba(13, 148, 136, 0.2);
+            border-radius: 8px;
+            padding: 10px 8px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .highlight-card i {
+            font-size: 18px;
+            color: var(--teal-primary);
+            margin-bottom: 4px;
+        }
+
+        .highlight-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--navy-dark);
+        }
+
+        .highlight-desc {
+            font-size: 9px;
+            color: #64748B;
+            margin-top: 2px;
+        }
+
+        /* SLIDE 3 & 4: Work Experience & Projects */
+        .timeline-item {
+            margin-bottom: 10px;
+        }
+
+        .timeline-title {
+            font-weight: 800;
+            font-size: 11px;
+            color: var(--navy-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timeline-role {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--teal-primary);
+            margin-bottom: 3px;
+        }
+
+        .timeline-bullets {
+            padding-left: 14px;
+            font-size: 10px;
+            color: #475569;
+            line-height: 1.45;
+        }
+
+        .timeline-bullets li {
+            margin-bottom: 2px;
+        }
+
+        .project-section-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--navy-dark);
+            border-top: 1px solid #E2E8F0;
+            padding-top: 8px;
+            margin-top: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* SLIDE 5: Certifications */
+        .cert-container {
+            display: grid;
+            grid-template-columns: 1fr 90px;
+            gap: 15px;
+            height: 100%;
+        }
+
+        .cert-item {
+            background: #F8FAFC;
+            border-left: 4px solid var(--teal-primary);
+            padding: 8px 12px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 8px;
+        }
+
+        .cert-name {
+            font-weight: 800;
+            font-size: 11px;
+            color: var(--navy-dark);
+        }
+
+        .cert-desc {
+            font-size: 9.5px;
+            color: #64748B;
+            margin-top: 2px;
+            line-height: 1.35;
+        }
+
+        .cert-illustration {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #F1F5F9, #E2E8F0);
+            border-radius: 8px;
+            border: 1px dashed #CBD5E1;
+            position: relative;
+        }
+
+        .seal-badge {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 22px;
+            box-shadow: 0 4px 10px rgba(217, 119, 6, 0.4);
+            border: 2px solid #FEF3C7;
+        }
+
+        .seal-text {
+            font-size: 8.5px;
+            font-weight: 800;
+            color: var(--navy-dark);
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        /* SLIDE 6: Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .skills-column-header {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--navy-primary);
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--teal-primary);
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+        }
+
+        .skill-tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .skill-tag {
+            background: #F1F5F9;
+            color: #334155;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 3px 7px;
+            border-radius: 4px;
+            border: 1px solid #E2E8F0;
+        }
+
+        .callout-banner {
+            background: linear-gradient(90deg, var(--navy-dark), var(--teal-primary));
+            color: #FFFFFF;
+            text-align: center;
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 1px;
+            padding: 6px;
+            border-radius: 6px;
+            margin-top: auto;
+        }
+
+
+        /* ========================================== */
+        /* FULL-SCREEN SLIDE PRESENTATION MODAL STYLES */
+        /* ========================================== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 25, 47, 0.88);
+            backdrop-filter: blur(8px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 16px;
+            color: #FFFFFF;
+        }
+
+        .modal-counter {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-modal {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-modal:hover {
+            background: var(--teal-primary);
+            border-color: var(--teal-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-close {
+            background: #EF4444;
+            border-color: #F87171;
+        }
+
+        .btn-close:hover {
+            background: #DC2626;
+        }
+
+        /* Large Slide Frame */
+        .modal-slide-container {
+            width: 100%;
+            max-width: 1100px;
+            aspect-ratio: 16 / 9;
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scaled up slide styles inside Modal */
+        .modal-slide-container .slide-header {
+            padding: 20px 32px;
+        }
+
+        .modal-slide-container .slide-header h2 {
+            font-size: 24px;
+            letter-spacing: 1.5px;
+        }
+
+        .modal-slide-container .slide-header h2::before {
+            width: 6px;
+            height: 24px;
+        }
+
+        .modal-slide-container .slide-body {
+            padding: 30px 40px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .modal-slide-container .slide-1-left {
+            padding: 40px 0 20px 40px;
+        }
+
+        .modal-slide-container .slide-1-title h2 {
+            font-size: 44px;
+        }
+
+        .modal-slide-container .slide-1-title h3 {
+            font-size: 28px;
+            margin-top: 8px;
+        }
+
+        .modal-slide-container .role-pill {
+            font-size: 15px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-top: 18px;
+        }
+
+        .modal-slide-container .contact-list {
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-slide-container .contact-item {
+            font-size: 16px;
+            gap: 12px;
+        }
+
+        .modal-slide-container .contact-item i {
+            font-size: 18px;
+        }
+
+        .modal-slide-container .about-text {
+            font-size: 20px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .modal-slide-container .highlights-grid {
+            gap: 20px;
+        }
+
+        .modal-slide-container .highlight-card {
+            padding: 20px 14px;
+            border-radius: 12px;
+        }
+
+        .modal-slide-container .highlight-card i {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .modal-slide-container .highlight-title {
+            font-size: 20px;
+        }
+
+        .modal-slide-container .highlight-desc {
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .modal-slide-container .timeline-item {
+            margin-bottom: 20px;
+        }
+
+        .modal-slide-container .timeline-title {
+            font-size: 18px;
+        }
+
+        .modal-slide-container .timeline-role {
+            font-size: 17px;
+            margin-bottom: 6px;
+        }
+
+        .modal-slide-container .timeline-bullets {
+            font-size: 16px;
+            line-height: 1.6;
+            padding-left: 20px;
+        }
+
+        .modal-slide-container .project-section-title {
+            font-size: 18px;
+            padding-top: 14px;
+            margin-top: 12px;
+        }
+
+        .modal-slide-container .cert-container {
+            grid-template-columns: 1fr 180px;
+            gap: 25px;
+        }
+
+        .modal-slide-container .cert-item {
+            padding: 16px 20px;
+            border-left-width: 6px;
+            margin-bottom: 16px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .modal-slide-container .cert-name {
+            font-size: 18px;
+        }
+
+        .modal-slide-container .cert-desc {
+            font-size: 15px;
+            margin-top: 6px;
+        }
+
+        .modal-slide-container .seal-badge {
+            width: 80px;
+            height: 80px;
+            font-size: 38px;
+        }
+
+        .modal-slide-container .seal-text {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .modal-slide-container .skills-column-header {
+            font-size: 18px;
+            border-bottom-width: 3px;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .modal-slide-container .skill-tag {
+            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 6px;
+        }
+
+        .modal-slide-container .callout-banner {
+            font-size: 18px;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        /* Modal Side Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(15, 23, 42, 0.6);
+            color: #FFFFFF;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .nav-arrow:hover {
+            background: var(--teal-primary);
+            border-color: var(--teal-light);
+            scale: 1.1;
+        }
+
+        .nav-arrow-left { left: 20px; }
+        .nav-arrow-right { right: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- Desk Accents -->
+    <svg class="desk-accent-leaf-top" viewBox="0 0 100 100" fill="none">
+        <path d="M10 90 Q 50 10 90 10 Q 90 50 10 90 Z" fill="#22C55E" opacity="0.3"/>
+        <path d="M20 80 Q 55 25 80 25 Q 75 55 20 80 Z" fill="#16A34A" opacity="0.4"/>
+    </svg>
+    <svg class="desk-accent-leaf-bottom" viewBox="0 0 100 100" fill="none">
+        <path d="M10 90 Q 50 10 90 10 Q 90 50 10 90 Z" fill="#15803D" opacity="0.3"/>
+    </svg>
+    <div class="desk-pen"></div>
+
+    <div class="header-title">
+        <h1>MARIA ROSARIO</h1>
+        <p>PORTOFOLIO DIGITAL INTERAKTIF (3x2 GRID MOCKUP)</p>
+        <div class="instruction-bar">
+            <i class="fa-solid fa-hand-pointer"></i> Klik pada slide mana saja untuk menampilkan <strong>SLIDE UTUH PRESENTASI</strong>
+        </div>
+    </div>
+
+    <!-- 3x2 Grid Canvas Container -->
+    <div class="workspace-grid">
+
+        <!-- SLIDE 1 (COVER) -->
+        <div class="slide-card" onclick="openModal(1)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-1-content">
+                <div class="slide-1-left">
+                    <div>
+                        <div class="slide-1-title">
+                            <h2>PORTOFOLIO</h2>
+                            <h3>MARIA ROSARIO</h3>
+                        </div>
+                        <div class="role-pill">
+                            ADMINISTRASI, DATA & CUSTOMER SERVICE
+                        </div>
+                    </div>
+                    <ul class="contact-list">
+                        <li class="contact-item"><i class="fa-solid fa-phone"></i> +6587836023264</li>
+                        <li class="contact-item"><i class="fa-solid fa-envelope"></i> maria.rosario44551@gmail.com</li>
+                        <li class="contact-item"><i class="fa-brands fa-linkedin"></i> mariarosario99</li>
+                    </ul>
+                </div>
+                <div class="slide-1-right">
+                    <img src="maria_profile.png" alt="Maria Rosario" class="slide-1-photo">
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 1</div>
+        </div>
+
+        <!-- SLIDE 2 (TENTANG SAYA) -->
+        <div class="slide-card" onclick="openModal(2)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>TENTANG SAYA</h2>
+            </div>
+            <div class="slide-body">
+                <p class="about-text">
+                    Lulusan S1 Sistem Informasi Universitas Duta Bangsa Surakarta (IPK 3.67). Berpengalaman 2 tahun di bidang Admin Operasional & Customer Service.
+                </p>
+                <div class="highlights-grid">
+                    <div class="highlight-card">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <div class="highlight-title">IPK 3.67</div>
+                        <div class="highlight-desc">Skala 4.00</div>
+                    </div>
+                    <div class="highlight-card">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <div class="highlight-title">2+ Tahun</div>
+                        <div class="highlight-desc">Pengalaman</div>
+                    </div>
+                    <div class="highlight-card">
+                        <i class="fa-solid fa-award"></i>
+                        <div class="highlight-title">2 Sertifikat</div>
+                        <div class="highlight-desc">BNSP</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 2</div>
+        </div>
+
+        <!-- SLIDE 3 (PENGALAMAN KERJA 01) -->
+        <div class="slide-card" onclick="openModal(3)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>PENGALAMAN KERJA 01</h2>
+            </div>
+            <div class="slide-body">
+                <div class="timeline-item">
+                    <div class="timeline-title">
+                        <span>SAMBER REDJEKI</span>
+                        <span style="font-size: 9px; color: #64748B;">Oct 2024 - Oct 2026</span>
+                    </div>
+                    <div class="timeline-role">Admin Operasional & Customer Service</div>
+                    <ul class="timeline-bullets">
+                        <li>Menyusun laporan cash flow & rekap penjualan</li>
+                        <li>Menangani layanan pelanggan & komplain</li>
+                        <li>Distribusi materi promosi & katalog sosial media</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item" style="margin-bottom: 0;">
+                    <div class="timeline-title">
+                        <span>POWER CLUB SOLO</span>
+                        <span style="font-size: 9px; color: #64748B;">Dec 2023 - Apr 2024</span>
+                    </div>
+                    <div class="timeline-role">Distributor / Consultant</div>
+                    <ul class="timeline-bullets">
+                        <li>Analisis komposisi tubuh pelanggan</li>
+                        <li>Pemasaran produk nutrisi (direct marketing)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 3</div>
+        </div>
+
+        <!-- SLIDE 4 (PENGALAMAN & PROYEK) -->
+        <div class="slide-card" onclick="openModal(4)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>PENGALAMAN & PROYEK</h2>
+            </div>
+            <div class="slide-body">
+                <div class="timeline-item">
+                    <div class="timeline-title">
+                        <span>TITI JAYA TEXTILE</span>
+                        <span style="font-size: 9px; color: #64748B;">Jun - Aug 2024</span>
+                    </div>
+                    <div class="timeline-role">Packing</div>
+                    <ul class="timeline-bullets">
+                        <li>Verifikasi pesanan & Quality Control (QC)</li>
+                        <li>Proses pengemasan (packing) logistik standar</li>
+                    </ul>
+                </div>
+
+                <div class="project-section-title">PROYEK UTAMA</div>
+                <ul class="timeline-bullets" style="margin-top: 4px;">
+                    <li><strong>Publikasi Ilmiah CRM:</strong> Toko Samber Redjeki Surakarta</li>
+                    <li><strong>Sistem Informasi Persediaan:</strong> Barang Berbasis Web</li>
+                </ul>
+            </div>
+            <div class="slide-badge">SLIDE 4</div>
+        </div>
+
+        <!-- SLIDE 5 (SERTIFIKASI BNSP) -->
+        <div class="slide-card" onclick="openModal(5)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>SERTIFIKASI BNSP</h2>
+            </div>
+            <div class="slide-body">
+                <div class="cert-container">
+                    <div>
+                        <div class="cert-item">
+                            <div class="cert-name">Office Ready Skill Digital Advanced (2026)</div>
+                            <div class="cert-desc">Penguasaan Ms Word, Excel, & PowerPoint tingkat dasar hingga lanjutan.</div>
+                        </div>
+                        <div class="cert-item" style="margin-bottom: 0;">
+                            <div class="cert-name">Junior Web Programmer (JWP) (2026)</div>
+                            <div class="cert-desc">Pemrograman web terstruktur, implementasi UI, & manajemen struktur data.</div>
+                        </div>
+                    </div>
+                    <div class="cert-illustration">
+                        <div class="seal-badge">
+                            <i class="fa-solid fa-ribbon"></i>
+                        </div>
+                        <div class="seal-text">RESMI BNSP</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 5</div>
+        </div>
+
+        <!-- SLIDE 6 (KEAHLIAN UTAMA) -->
+        <div class="slide-card" onclick="openModal(6)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>KEAHLIAN UTAMA</h2>
+            </div>
+            <div class="slide-body">
+                <div class="skills-grid">
+                    <div>
+                        <div class="skills-column-header">HARD SKILLS</div>
+                        <div class="skill-tag-container">
+                            <span class="skill-tag">Data Admin</span>
+                            <span class="skill-tag">Spreadsheets</span>
+                            <span class="skill-tag">Data Entry</span>
+                            <span class="skill-tag">MS Office</span>
+                            <span class="skill-tag">Google Workspace</span>
+                            <span class="skill-tag">Order Fulfillment</span>
+                            <span class="skill-tag">Canva</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="skills-column-header">SOFT SKILLS</div>
+                        <div class="skill-tag-container">
+                            <span class="skill-tag">Teliti & Detail</span>
+                            <span class="skill-tag">Manajemen Waktu</span>
+                            <span class="skill-tag">Komunikatif</span>
+                            <span class="skill-tag">Mandiri & Tim</span>
+                            <span class="skill-tag">Cepat Belajar</span>
+                            <span class="skill-tag">Adaptif</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="callout-banner">
+                    MARI BERKOLABORASI!
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 6</div>
+        </div>
+
+    </div>
+
+    <!-- FULL-SCREEN MODAL PRESENTATION VIEWER -->
+    <div id="slideModal" class="modal-overlay" onclick="handleOverlayClick(event)">
+        <div class="modal-toolbar">
+            <div class="modal-counter">
+                <i class="fa-solid fa-sliders"></i> <span id="modalCounterText">Slide 1 dari 6</span>
+            </div>
+            <div class="modal-controls">
+                <button class="btn-modal" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i> SEBELUMNYA</button>
+                <button class="btn-modal" onclick="nextSlide()">SELANJUTNYA <i class="fa-solid fa-chevron-right"></i></button>
+                <button class="btn-modal btn-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> TUTUP</button>
+            </div>
+        </div>
+
+        <button class="nav-arrow nav-arrow-left" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="nav-arrow nav-arrow-right" onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
+
+        <div id="modalSlideFrame" class="modal-slide-container">
+            <!-- Slide Content Injected Dynamically via JS -->
+        </div>
+    </div>
+
+    <script>
+        let currentSlideIndex = 1;
+        const totalSlides = 6;
+        const modal = document.getElementById('slideModal');
+        const modalSlideFrame = document.getElementById('modalSlideFrame');
+        const modalCounterText = document.getElementById('modalCounterText');
+        const slideCards = document.querySelectorAll('.workspace-grid .slide-card');
+
+        function openModal(index) {
+            currentSlideIndex = index;
+            renderModalSlide();
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextSlide() {
+            currentSlideIndex = currentSlideIndex >= totalSlides ? 1 : currentSlideIndex + 1;
+            renderModalSlide();
+        }
+
+        function prevSlide() {
+            currentSlideIndex = currentSlideIndex <= 1 ? totalSlides : currentSlideIndex - 1;
+            renderModalSlide();
+        }
+
+        function renderModalSlide() {
+            const targetCard = slideCards[currentSlideIndex - 1];
+            // Clone node without the hover overlay and slide badge
+            const clone = targetCard.cloneNode(true);
+            
+            const overlay = clone.querySelector('.hover-overlay');
+            if (overlay) overlay.remove();
+            
+            const badge = clone.querySelector('.slide-badge');
+            if (badge) badge.remove();
+
+            // Clear frame and append cloned contents
+            modalSlideFrame.innerHTML = clone.innerHTML;
+            modalCounterText.textContent = `Slide ${currentSlideIndex} dari ${totalSlides}`;
+        }
+
+        function handleOverlayClick(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Keyboard Navigation Support
+        document.addEventListener('keydown', function(e) {
+            if (modal.style.display === 'flex') {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'Escape') {
+                    closeModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
