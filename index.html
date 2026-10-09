@@ -1,0 +1,3764 @@
+<!--
+/**
+ * @target Portofolio Digital Interaktif Maria Rosario (9 Slides Presentation)
+ * @depends assets/bpvp_training_photo.jpg, assets/Sertifikat_BPVP_Office_Ready.pdf, assets/Sertifikat_BNSP_Junior_Web_Programmer.pdf, assets/sertifikat_bnsp_jwp_preview.png, assets/maria_profile_new.jpg, assets/maria_formal_photo.png, assets/qr_cv.png, assets/CV - Maria Rosario.pdf
+ * @side-effect Menampilkan presentasi portofolio 9 slide dengan grid responsif & modal interaktif full-screen 16:9
+ */
+-->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Digital - Maria Rosario (9 Slides Interactive Presentation)</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            /* TEMA UTAMA: NAVY BLUE, WHITE, & VIBRANT TEAL */
+            --navy-dark: #0A192F;
+            --navy-primary: #0F172A;
+            --navy-surface: #1E293B;
+            --teal-primary: #0D9488;
+            --teal-light: #14B8A6;
+            --teal-bg: #E6FFFA;
+            --teal-ice: #F0FDFA;
+            --white: #FFFFFF;
+            --slate-light: #F8FAFC;
+            --slate-border: #E2E8F0;
+            --text-dark: #0F172A;
+            --text-muted: #64748B;
+            --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #E2E8F0;
+            background-image: 
+                radial-gradient(#CBD5E1 1.2px, transparent 1.2px),
+                linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+            background-size: 24px 24px, 100% 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px 60px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Minimalist Desk Accents */
+        .desk-accent-leaf-top {
+            position: fixed;
+            top: -15px;
+            right: -15px;
+            width: 160px;
+            height: 160px;
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .desk-accent-leaf-bottom {
+            position: fixed;
+            bottom: -15px;
+            left: -15px;
+            width: 170px;
+            height: 170px;
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: 1;
+            transform: rotate(90deg);
+        }
+
+        .desk-pen {
+            position: fixed;
+            left: 28px;
+            top: 36%;
+            width: 11px;
+            height: 220px;
+            background: linear-gradient(90deg, #334155, #0F172A, #475569);
+            border-radius: 6px;
+            box-shadow: 10px 10px 18px rgba(0,0,0,0.12);
+            transform: rotate(-10deg);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .desk-pen::after {
+            content: '';
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 18px solid #94A3B8;
+        }
+
+        /* Main Header Banner */
+        .header-title-box {
+            text-align: center;
+            margin-bottom: 25px;
+            z-index: 2;
+        }
+
+        .header-title-box h1 {
+            color: var(--navy-primary);
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .header-title-box p {
+            color: var(--text-muted);
+            font-size: 13.5px;
+            font-weight: 700;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .instruction-badge {
+            background: rgba(13, 148, 136, 0.12);
+            border: 1px solid var(--teal-light);
+            color: var(--teal-primary);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 12.5px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.12);
+        }
+
+        /* 3-Column Grid Canvas Container */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1440px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        @media (min-width: 1200px) {
+            .workspace-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 1199px) and (min-width: 768px) {
+            .workspace-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .workspace-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Slide Card Component */
+        .slide-card {
+            background: #FFFFFF;
+            border-radius: 14px;
+            box-shadow: var(--card-shadow);
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .slide-card:hover {
+            transform: translateY(-6px) scale(1.018);
+            border-color: var(--teal-light);
+            box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.28);
+        }
+
+        /* Hover Overlay */
+        .hover-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            opacity: 0;
+            transition: opacity 0.22s ease;
+            z-index: 10;
+        }
+
+        .slide-card:hover .hover-overlay {
+            opacity: 1;
+        }
+
+        .hover-overlay i {
+            font-size: 32px;
+            color: var(--teal-light);
+            margin-bottom: 8px;
+            transform: scale(0.85);
+            transition: transform 0.2s ease;
+        }
+
+        .slide-card:hover .hover-overlay i {
+            transform: scale(1);
+        }
+
+        .hover-overlay span {
+            font-size: 12.5px;
+            font-weight: 800;
+            background: var(--teal-primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        }
+
+        .slide-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            background: rgba(15, 23, 42, 0.1);
+            color: #475569;
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            z-index: 5;
+        }
+
+        /* Slide Header */
+        .slide-header {
+            background: var(--navy-primary);
+            color: #FFFFFF;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .slide-header h2 {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slide-header h2::before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            background: var(--teal-light);
+            border-radius: 2px;
+        }
+
+        .slide-body {
+            padding: 14px 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: #1E293B;
+            font-size: 11.5px;
+            line-height: 1.5;
+            background: #FFFFFF;
+        }
+
+        /* ============================================== */
+        /* SLIDE 1 (COVER)                                */
+        /* ============================================== */
+        .slide-1-content {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            height: 100%;
+        }
+
+        .slide-1-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 8px 0 8px 12px;
+        }
+
+        .slide-1-title h2 {
+            font-size: 14px;
+            font-weight: 900;
+            color: var(--navy-primary);
+            line-height: 1.1;
+            letter-spacing: 0.8px;
+        }
+
+        .slide-1-title h3 {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--teal-primary);
+            margin-top: 1px;
+            letter-spacing: 0.3px;
+        }
+
+        .role-pill {
+            display: inline-block;
+            background: var(--navy-primary);
+            color: #FFFFFF;
+            font-size: 5.5px;
+            font-weight: 800;
+            padding: 2px 5px;
+            border-radius: 3px;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Slide 1 Competencies (Grid View) */
+        .cover-competency-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5px;
+            margin: 2px 0;
+        }
+
+        .career-focus-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .career-focus-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 2.5px;
+            border: 1px solid var(--teal-primary);
+            background: rgba(13, 148, 136, 0.08);
+            color: var(--teal-primary);
+            font-size: 4.8px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            padding: 1px 4px;
+            border-radius: 8px;
+        }
+
+        .cover-competency-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3px;
+        }
+
+        .cover-comp-col {
+            background: #F8FAFC;
+            border-radius: 3px;
+            padding: 2px;
+            border: 0.5px solid #E2E8F0;
+        }
+
+        .cover-comp-header {
+            font-size: 4.5px;
+            font-weight: 800;
+            color: #334155;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            padding-bottom: 1px;
+            border-bottom: 1px solid var(--teal-light);
+            margin-bottom: 1.5px;
+        }
+
+        .cover-comp-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .cover-comp-list li {
+            font-size: 3.8px;
+            color: #475569;
+            font-weight: 600;
+            line-height: 1.15;
+            display: flex;
+            align-items: center;
+            gap: 1.5px;
+            white-space: nowrap;
+        }
+
+        .comp-dot {
+            font-size: 1.8px;
+            color: var(--teal-primary);
+            flex-shrink: 0;
+        }
+
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 2px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 5.5px;
+            color: #475569;
+            font-weight: 700;
+        }
+
+        .contact-item a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            color: var(--teal-primary);
+        }
+
+        .contact-item i {
+            color: var(--teal-primary);
+            width: 8px;
+            text-align: center;
+        }
+
+        .slide-1-right {
+            position: relative;
+            background: linear-gradient(135deg, var(--navy-dark), var(--navy-surface));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-bottom-left-radius: 35px;
+            padding: 12px;
+        }
+
+        .slide-1-photo {
+            width: 90%;
+            height: 92%;
+            object-fit: cover;
+            object-position: center 15%;
+            border-radius: 12px;
+            border: 3px solid var(--teal-light);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+        }
+
+        /* ============================================== */
+        /* SLIDE 2 (TENTANG SAYA - SPLIT LAYOUT)          */
+        /* ============================================== */
+        .about-split-content {
+            display: grid;
+            grid-template-columns: 65% 35%;
+            gap: 12px;
+            align-items: center;
+            flex: 1;
+            margin-bottom: 8px;
+        }
+
+        .about-text-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .about-text {
+            color: #334155;
+            font-size: 8.5px;
+            line-height: 1.35;
+            text-align: left;
+            margin: 0;
+        }
+
+        .about-photo-col {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .about-photo-img {
+            width: 100%;
+            max-width: 85px;
+            height: 92px;
+            object-fit: cover;
+            object-position: center 20%;
+            border-radius: 8px;
+            border: 2px solid var(--teal-light);
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .highlight-card {
+            background: var(--teal-bg);
+            border: 1px solid rgba(13, 148, 136, 0.22);
+            border-radius: 8px;
+            padding: 8px 6px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .highlight-card i {
+            font-size: 17px;
+            color: var(--teal-primary);
+            margin-bottom: 4px;
+        }
+
+        .highlight-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--navy-primary);
+        }
+
+        .highlight-desc {
+            font-size: 8.5px;
+            color: #64748B;
+            margin-top: 1px;
+            font-weight: 600;
+        }
+
+        /* ============================================== */
+        /* SLIDE 3 (PENDIDIKAN, PENGALAMAN, TOOLS, SKILLS) */
+        /* ============================================== */
+        .slide-3-body-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            gap: 14px;
+            height: 100%;
+        }
+
+        .resume-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .resume-sub-header {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--navy-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1.5px solid var(--teal-light);
+            padding-bottom: 3px;
+        }
+
+        .resume-sub-header i {
+            color: var(--teal-primary);
+        }
+
+        .edu-box-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .edu-mini-card {
+            background: var(--slate-light);
+            border: 1px solid var(--slate-border);
+            border-radius: 6px;
+            padding: 5px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .edu-mini-year {
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--teal-primary);
+            background: var(--teal-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .edu-mini-name {
+            font-size: 9.5px;
+            font-weight: 800;
+            color: var(--navy-primary);
+        }
+
+        .edu-mini-sub {
+            font-size: 8.5px;
+            color: var(--text-muted);
+        }
+
+        .edu-mini-gpa {
+            font-size: 8.5px;
+            font-weight: 800;
+            color: var(--navy-primary);
+            background: #E2E8F0;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        /* Timeline vertical */
+        .exp-mini-timeline {
+            position: relative;
+            padding-left: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .exp-mini-timeline::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            bottom: 4px;
+            width: 2px;
+            background: var(--teal-light);
+        }
+
+        .exp-mini-node {
+            position: relative;
+        }
+
+        .exp-mini-node::before {
+            content: '';
+            position: absolute;
+            left: -12.5px;
+            top: 4px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--teal-primary);
+            border: 1.5px solid #FFFFFF;
+        }
+
+        .exp-mini-date {
+            font-size: 8.5px;
+            font-weight: 700;
+            color: var(--teal-primary);
+        }
+
+        .exp-mini-company {
+            font-size: 9.5px;
+            font-weight: 800;
+            color: var(--navy-primary);
+        }
+
+        .exp-mini-role {
+            font-size: 8.5px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        /* QR Code & Tools Column */
+        .qr-card-container {
+            background: #FFFFFF;
+            border: 1px solid var(--slate-border);
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .qr-card-container:hover {
+            border-color: var(--teal-primary);
+            transform: translateY(-2px);
+        }
+
+        .qr-img-box {
+            width: 58px;
+            height: 58px;
+            flex-shrink: 0;
+            background: #FFFFFF;
+            padding: 2px;
+            border: 1px solid var(--slate-border);
+            border-radius: 6px;
+        }
+
+        .qr-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .qr-text-caption {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--navy-primary);
+            line-height: 1.35;
+        }
+
+        .qr-text-caption span {
+            color: var(--teal-primary);
+            font-weight: 800;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* Tools Chips */
+        .tools-card-box {
+            background: var(--slate-light);
+            border: 1px solid var(--slate-border);
+            border-radius: 8px;
+            padding: 6px 8px;
+        }
+
+        .tool-icon-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .tool-badge-pill {
+            background: #FFFFFF;
+            border: 1px solid var(--slate-border);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 8px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--navy-primary);
+        }
+
+        /* Skills Box */
+        .skills-card-box {
+            background: var(--teal-bg);
+            border: 1px solid rgba(13, 148, 136, 0.25);
+            border-radius: 8px;
+            padding: 6px 8px;
+        }
+
+        .skill-tag-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-top: 4px;
+        }
+
+        .skill-pill-item {
+            background: #FFFFFF;
+            color: var(--teal-primary);
+            border: 1px solid rgba(13, 148, 136, 0.2);
+            padding: 2px 5px;
+            border-radius: 12px;
+            font-size: 7.5px;
+            font-weight: 700;
+        }
+
+        /* ============================================== */
+        /* SLIDE 4 & 5 (PENGALAMAN & PROYEK)              */
+        /* ============================================== */
+        .timeline-item {
+            margin-bottom: 8px;
+        }
+
+        .timeline-title {
+            font-weight: 800;
+            font-size: 11px;
+            color: var(--navy-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timeline-role {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--teal-primary);
+            margin-bottom: 2px;
+        }
+
+        .timeline-bullets {
+            padding-left: 14px;
+            font-size: 9.5px;
+            color: #475569;
+            line-height: 1.45;
+        }
+
+        .timeline-bullets li {
+            margin-bottom: 1px;
+        }
+
+        .project-section-title {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--navy-primary);
+            border-top: 1px solid var(--slate-border);
+            padding-top: 6px;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ============================================== */
+        /* SLIDE 4 & 5 (ROLES & RESPONSIBILITIES STYLES)  */
+        /* ============================================== */
+        .slide-header-tag {
+            font-size: 9.5px;
+            color: var(--teal-light);
+            font-weight: 800;
+            background: rgba(20, 184, 166, 0.15);
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .roles-company-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--slate-light);
+            border: 1px solid var(--slate-border);
+            border-left: 4px solid var(--teal-primary);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .roles-company-name {
+            font-size: 11.5px;
+            font-weight: 900;
+            color: var(--navy-primary);
+            letter-spacing: 0.3px;
+        }
+
+        .roles-company-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--teal-primary);
+        }
+
+        .roles-company-badge {
+            font-size: 9px;
+            font-weight: 800;
+            color: #475569;
+            background: #FFFFFF;
+            border: 1px solid var(--slate-border);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .roles-list-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .role-desc-card {
+            background: #FFFFFF;
+            border: 1px solid var(--slate-border);
+            border-radius: 8px;
+            padding: 7px 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            transition: border-color 0.2s ease;
+        }
+
+        .role-desc-card:hover {
+            border-color: var(--teal-light);
+        }
+
+        .role-icon-col {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: var(--teal-bg);
+            color: var(--teal-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .role-text-col {
+            flex: 1;
+        }
+
+        .role-text-headline {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--navy-primary);
+            margin-bottom: 1px;
+        }
+
+        .role-text-col p {
+            font-size: 9px;
+            color: #475569;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .roles-tag-footer {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .role-pill-tag {
+            background: var(--slate-light);
+            color: var(--navy-primary);
+            border: 1px solid var(--slate-border);
+            font-size: 8px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .role-pill-tag i {
+            color: var(--teal-primary);
+            font-size: 7.5px;
+        }
+
+        /* Slide 5 Specific Compact Styling in Grid View */
+        .slide-card .slide-5-body {
+            padding: 8px 10px;
+        }
+        .slide-card .slide-5-body .roles-company-banner {
+            padding: 4px 8px;
+            margin-bottom: 4px;
+            border-radius: 5px;
+        }
+        .slide-card .slide-5-body .roles-company-name {
+            font-size: 10px;
+        }
+        .slide-card .slide-5-body .roles-company-title {
+            font-size: 8.5px;
+        }
+        .slide-card .slide-5-body .roles-company-badge {
+            font-size: 7.5px;
+            padding: 2px 5px;
+        }
+        .slide-card .slide-5-body .roles-list-group {
+            gap: 4px;
+        }
+        .slide-card .slide-5-body .role-desc-card {
+            padding: 4px 6px;
+            gap: 6px;
+            border-radius: 5px;
+        }
+        .slide-card .slide-5-body .role-icon-col {
+            width: 22px;
+            height: 22px;
+            font-size: 11px;
+            border-radius: 4px;
+        }
+        .slide-card .slide-5-body .role-text-headline {
+            font-size: 8.5px;
+            margin-bottom: 0px;
+        }
+        .slide-card .slide-5-body .role-text-col p {
+            font-size: 7.5px;
+            line-height: 1.25;
+        }
+        .slide-card .slide-5-body .comp-banner-2 {
+            margin-top: 6px;
+        }
+
+        /* ============================================== */
+        /* SLIDE 6 (BPVP SURAKARTA PELATIHAN KERJA)      */
+        /* ============================================== */
+        .slide-card .slide-6-body {
+            padding: 5px 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide-card .slide-6-body .roles-company-banner {
+            padding: 2.5px 7px;
+            margin-bottom: 3px;
+            border-radius: 4px;
+        }
+        .slide-card .bpvp-split-layout {
+            display: grid;
+            grid-template-columns: 1fr 48px;
+            gap: 6px;
+            align-items: flex-start;
+            flex: 1;
+        }
+        .slide-card .bpvp-bullets-col {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .slide-card .bpvp-bullets-col .role-desc-card {
+            padding: 2px 5px;
+            gap: 5px;
+            border-radius: 4px;
+        }
+        .slide-card .bpvp-bullets-col .role-icon-col {
+            width: 14px;
+            height: 14px;
+            font-size: 7.5px;
+            border-radius: 3px;
+        }
+        .slide-card .bpvp-bullets-col .role-text-headline {
+            font-size: 7.5px;
+            margin-bottom: 0px;
+        }
+        .slide-card .bpvp-bullets-col .role-text-col p {
+            font-size: 6.5px;
+            line-height: 1.15;
+        }
+        .slide-card .bpvp-cert-card {
+            background: var(--teal-bg);
+            border: 1px solid rgba(13, 148, 136, 0.35);
+            border-radius: 4px;
+            padding: 2px 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            margin-top: 4px;
+        }
+        .slide-card .bpvp-cert-icon {
+            color: var(--teal-primary);
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .slide-card .bpvp-cert-title {
+            font-size: 7px;
+            font-weight: 800;
+            color: var(--navy-primary);
+        }
+        .slide-card .bpvp-cert-subtitle {
+            font-size: 5.5px;
+            color: #64748B;
+        }
+        .slide-card .bpvp-cert-badge-link {
+            display: none !important;
+        }
+        .slide-card .bpvp-visual-col {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            height: 100%;
+        }
+        .slide-card .bpvp-photo-box {
+            width: 100%;
+            height: 84px;
+            aspect-ratio: 576 / 1024;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1.5px solid var(--teal-light);
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+            background: #0F172A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slide-card .bpvp-photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ============================================== */
+        /* SLIDE 7 (SERTIFIKASI BNSP)                     */
+        /* ============================================== */
+        .cert-container {
+            display: grid;
+            grid-template-columns: 1fr 65px;
+            gap: 8px;
+            height: 100%;
+            align-items: center;
+        }
+
+        .cert-item {
+            background: #F8FAFC;
+            border-left: 3px solid var(--teal-primary);
+            padding: 4px 6px;
+            border-radius: 0 5px 5px 0;
+            margin-bottom: 5px;
+        }
+
+        .cert-item.cert-jwp {
+            border-left-color: #0284C7;
+            background: #F0F9FF;
+        }
+
+        .cert-badge-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 2px;
+        }
+
+        .cert-badge-tag {
+            font-size: 5px;
+            font-weight: 800;
+            padding: 1px 4px;
+            border-radius: 3px;
+            background: rgba(13, 148, 136, 0.12);
+            color: var(--teal-primary);
+            text-transform: uppercase;
+        }
+
+        .cert-badge-tag.tag-blue {
+            background: rgba(2, 132, 199, 0.12);
+            color: #0284C7;
+        }
+
+        .cert-id-tag {
+            font-size: 5px;
+            font-weight: 700;
+            color: #64748B;
+            background: rgba(100, 116, 139, 0.1);
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        .cert-name {
+            font-weight: 800;
+            font-size: 7.5px;
+            color: var(--navy-primary);
+            line-height: 1.2;
+        }
+
+        .cert-desc {
+            font-size: 5.8px;
+            color: #64748B;
+            margin-top: 1px;
+            line-height: 1.25;
+        }
+
+        .cert-card-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 5.5px;
+            font-weight: 800;
+            color: var(--teal-primary);
+            text-decoration: none;
+            margin-top: 2px;
+        }
+
+        .cert-card-btn.btn-blue {
+            color: #0284C7;
+        }
+
+        .cert-doc-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            height: 100%;
+            justify-content: center;
+        }
+
+        .cert-doc-preview-wrapper {
+            width: 100%;
+            height: 85px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #CBD5E1;
+            box-shadow: 0 2px 5px rgba(15, 23, 42, 0.08);
+            position: relative;
+            background: #FFFFFF;
+        }
+
+        .cert-doc-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            display: block;
+        }
+
+        .cert-doc-hover-pill {
+            display: none;
+        }
+
+        .cert-doc-footer {
+            display: none;
+        }
+
+        .seal-badge {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(217, 119, 6, 0.35);
+            border: 2px solid #FEF3C7;
+        }
+
+        .seal-text {
+            font-size: 8px;
+            font-weight: 800;
+            color: var(--navy-primary);
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        /* ============================================== */
+        /* SLIDE 8 (KEAHLIAN UTAMA & CLOSING)             */
+        /* ============================================== */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .skills-column-header {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--navy-primary);
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--teal-primary);
+            padding-bottom: 3px;
+            margin-bottom: 6px;
+        }
+
+        .skill-tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .skill-tag {
+            background: #F1F5F9;
+            color: #334155;
+            font-size: 8.5px;
+            font-weight: 700;
+            padding: 3px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--slate-border);
+        }
+
+        .callout-banner {
+            background: linear-gradient(90deg, var(--navy-primary), var(--teal-primary));
+            color: #FFFFFF;
+            text-align: center;
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 1px;
+            padding: 7px;
+            border-radius: 6px;
+            margin-top: auto;
+        }
+
+        /* ============================================== */
+        /* SLIDE 9 (THANK YOU & CONTACT DETAILS)          */
+        /* ============================================== */
+        .slide-9-content {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            height: 100%;
+        }
+
+        .slide-9-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 0 10px 14px;
+        }
+
+        .slide-9-headline-box {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .slide-9-headline {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--navy-primary);
+            line-height: 1.05;
+            letter-spacing: -0.3px;
+        }
+
+        .slide-9-contact-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .slide-9-subheadline {
+            font-size: 6px;
+            font-weight: 800;
+            color: var(--teal-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1px;
+        }
+
+        .slide-9-contact-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5px;
+        }
+
+        .slide-9-contact-link {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2.5px 4px;
+            border-radius: 4px;
+            background: #F8FAFC;
+            border: 0.5px solid #E2E8F0;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .slide-9-contact-link:hover {
+            background: #F0FDFA;
+            border-color: var(--teal-primary);
+        }
+
+        .slide-9-contact-link .contact-icon-box {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6px;
+            color: #FFFFFF;
+            flex-shrink: 0;
+        }
+
+        .slide-9-contact-link.link-linkedin .contact-icon-box { background: #0A66C2; }
+        .slide-9-contact-link.link-email .contact-icon-box { background: #0D9488; }
+        .slide-9-contact-link.link-whatsapp .contact-icon-box { background: #25D366; }
+
+        .slide-9-contact-link .contact-info-box {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .slide-9-contact-link .contact-platform {
+            display: none;
+        }
+
+        .slide-9-contact-link .contact-value {
+            font-size: 5px;
+            font-weight: 700;
+            color: #334155;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .slide-9-contact-link .contact-action-icon {
+            display: none;
+        }
+
+        .slide-9-right {
+            position: relative;
+            background: linear-gradient(135deg, var(--navy-dark), var(--navy-surface));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-bottom-left-radius: 35px;
+            padding: 10px;
+        }
+
+        .slide-9-photo {
+            width: 90%;
+            height: 92%;
+            object-fit: cover;
+            object-position: center 15%;
+            border-radius: 10px;
+            border: 2px solid var(--teal-light);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+        }
+
+        /* ============================================== */
+        /* FULL-SCREEN SLIDE UTUH PRESENTATION MODAL      */
+        /* ============================================== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 25, 47, 0.9);
+            backdrop-filter: blur(8px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            animation: modalFadeIn 0.25s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1120px;
+            margin-bottom: 12px;
+            color: #FFFFFF;
+            gap: 12px;
+        }
+
+        .modal-counter {
+            font-size: 13.5px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .modal-dots {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-dot {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-dot:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-dot.active {
+            background: var(--teal-primary);
+            border-color: var(--teal-light);
+            box-shadow: 0 0 10px rgba(20, 184, 166, 0.6);
+            transform: scale(1.1);
+        }
+
+        .modal-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-modal {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .btn-modal:hover {
+            background: var(--teal-primary);
+            border-color: var(--teal-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-close {
+            background: #EF4444;
+            border-color: #F87171;
+        }
+
+        .btn-close:hover {
+            background: #DC2626;
+        }
+
+        /* Large Slide Frame (16:9) */
+        .modal-slide-container {
+            width: 100%;
+            max-width: 1120px;
+            max-height: calc(100vh - 110px);
+            aspect-ratio: 16 / 9;
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scaled-up Styles inside Modal */
+        .modal-slide-container .slide-header {
+            padding: 16px 28px !important;
+        }
+
+        .modal-slide-container .slide-header h2 {
+            font-size: 21px !important;
+            gap: 12px !important;
+        }
+
+        .modal-slide-container .slide-header h2::before {
+            width: 5px !important;
+            height: 21px !important;
+        }
+
+        .modal-slide-container .slide-header-tag {
+            font-size: 13.5px !important;
+            padding: 5px 12px !important;
+            border-radius: 6px !important;
+        }
+
+        .modal-slide-container .slide-body {
+            padding: 24px 34px !important;
+            font-size: 16px !important;
+            line-height: 1.6 !important;
+        }
+
+        /* SLIDE 1 MODAL (WITH LINKEDIN BRANDING & COMPETENCY COLUMNS) */
+        .modal-slide-container .slide-1-left {
+            padding: 28px 0 24px 34px !important;
+            justify-content: space-between !important;
+        }
+
+        .modal-slide-container .slide-1-title h2 {
+            font-size: 38px !important;
+            line-height: 1.1 !important;
+            letter-spacing: 1.5px !important;
+        }
+
+        .modal-slide-container .slide-1-title h3 {
+            font-size: 23px !important;
+            margin-top: 4px !important;
+        }
+
+        .modal-slide-container .role-pill {
+            font-size: 12.5px !important;
+            padding: 5px 14px !important;
+            border-radius: 6px !important;
+            margin-top: 8px !important;
+        }
+
+        .modal-slide-container .cover-competency-section {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+            margin: 12px 0 8px 0 !important;
+        }
+
+        .modal-slide-container .career-focus-wrapper {
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .modal-slide-container .career-focus-badge {
+            font-size: 11.5px !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.8px !important;
+            border: 1.5px solid var(--teal-primary) !important;
+            background: rgba(13, 148, 136, 0.08) !important;
+            color: var(--teal-primary) !important;
+            padding: 5px 14px !important;
+            border-radius: 20px !important;
+            gap: 6px !important;
+        }
+
+        .modal-slide-container .cover-competency-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 12px !important;
+        }
+
+        .modal-slide-container .cover-comp-col {
+            background: #F8FAFC !important;
+            border-radius: 8px !important;
+            padding: 9px 12px !important;
+            border: 1px solid #E2E8F0 !important;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03) !important;
+        }
+
+        .modal-slide-container .cover-comp-header {
+            font-size: 10.5px !important;
+            font-weight: 900 !important;
+            color: #1E293B !important;
+            letter-spacing: 0.8px !important;
+            text-transform: uppercase !important;
+            padding-bottom: 4px !important;
+            border-bottom: 2px solid var(--teal-light) !important;
+            margin-bottom: 6px !important;
+        }
+
+        .modal-slide-container .cover-comp-list {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 4.5px !important;
+        }
+
+        .modal-slide-container .cover-comp-list li {
+            font-size: 10px !important;
+            color: #475569 !important;
+            font-weight: 600 !important;
+            line-height: 1.35 !important;
+            gap: 5px !important;
+        }
+
+        .modal-slide-container .comp-dot {
+            font-size: 4px !important;
+            color: var(--teal-primary) !important;
+        }
+
+        .modal-slide-container .contact-list {
+            gap: 8px !important;
+            margin-top: 8px !important;
+        }
+
+        .modal-slide-container .contact-item {
+            font-size: 13.5px !important;
+            gap: 10px !important;
+        }
+
+        .modal-slide-container .contact-item i {
+            font-size: 16px !important;
+            width: 18px !important;
+        }
+
+        /* SLIDE 2 MODAL */
+        .modal-slide-container .about-split-content {
+            display: grid !important;
+            grid-template-columns: 65% 35% !important;
+            gap: 28px !important;
+            align-items: center !important;
+            margin-bottom: 20px !important;
+            flex: 1 !important;
+        }
+
+        .modal-slide-container .about-text-col {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            gap: 12px !important;
+        }
+
+        .modal-slide-container .about-text {
+            font-size: 15px !important;
+            line-height: 1.65 !important;
+            margin-bottom: 0 !important;
+            color: #1E293B !important;
+            text-align: left !important;
+        }
+
+        .modal-slide-container .about-photo-col {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            height: 100% !important;
+        }
+
+        .modal-slide-container .about-photo-img {
+            width: 100% !important;
+            max-width: 215px !important;
+            height: 235px !important;
+            object-fit: cover !important;
+            object-position: center 20% !important;
+            border-radius: 14px !important;
+            border: 3px solid var(--teal-light) !important;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2) !important;
+        }
+
+        .modal-slide-container .highlights-grid {
+            gap: 20px !important;
+            margin-top: auto !important;
+        }
+
+        .modal-slide-container .highlight-card {
+            padding: 16px 14px !important;
+            border-radius: 12px !important;
+        }
+
+        .modal-slide-container .highlight-card i {
+            font-size: 32px !important;
+            margin-bottom: 6px !important;
+        }
+
+        .modal-slide-container .highlight-title {
+            font-size: 19px !important;
+        }
+
+        .modal-slide-container .highlight-desc {
+            font-size: 13.5px !important;
+            margin-top: 3px !important;
+        }
+
+        /* SLIDE 3 MODAL */
+        .modal-slide-container[data-slide="3"] .slide-body {
+            padding: 20px 32px !important;
+        }
+
+        .modal-slide-container .slide-3-body-grid {
+            gap: 24px !important;
+        }
+
+        .modal-slide-container .resume-panel {
+            gap: 7px !important;
+        }
+
+        .modal-slide-container .resume-sub-header {
+            font-size: 15px !important;
+            padding-bottom: 4px !important;
+            border-bottom-width: 2px !important;
+            margin-bottom: 3px !important;
+        }
+
+        .modal-slide-container .edu-box-row {
+            gap: 7px !important;
+        }
+
+        .modal-slide-container .edu-mini-card {
+            padding: 9px 14px !important;
+            border-radius: 8px !important;
+        }
+
+        .modal-slide-container .edu-mini-year {
+            font-size: 11.5px !important;
+            padding: 3px 8px !important;
+        }
+
+        .modal-slide-container .edu-mini-name {
+            font-size: 14.5px !important;
+            line-height: 1.3 !important;
+        }
+
+        .modal-slide-container .edu-mini-sub {
+            font-size: 12.5px !important;
+            line-height: 1.3 !important;
+        }
+
+        .modal-slide-container .edu-mini-gpa {
+            font-size: 12px !important;
+            padding: 3px 8px !important;
+        }
+
+        .modal-slide-container .exp-mini-timeline {
+            padding-left: 19px !important;
+            gap: 9px !important;
+            margin-top: 3px !important;
+        }
+
+        .modal-slide-container .exp-mini-timeline::before {
+            width: 2.5px !important;
+            left: 5px !important;
+            top: 2px !important;
+            bottom: 2px !important;
+        }
+
+        .modal-slide-container .exp-mini-node {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1.5px !important;
+        }
+
+        .modal-slide-container .exp-mini-node::before {
+            width: 8.5px !important;
+            height: 8.5px !important;
+            left: -16.5px !important;
+            top: 4px !important;
+        }
+
+        .modal-slide-container .exp-mini-date {
+            font-size: 11.5px !important;
+            line-height: 1.25 !important;
+        }
+
+        .modal-slide-container .exp-mini-company {
+            font-size: 14.5px !important;
+            line-height: 1.25 !important;
+            margin: 1px 0 !important;
+        }
+
+        .modal-slide-container .exp-mini-role {
+            font-size: 13px !important;
+            line-height: 1.25 !important;
+        }
+
+        .modal-slide-container .qr-card-container {
+            padding: 12px 16px !important;
+            gap: 16px !important;
+            border-radius: 12px !important;
+        }
+
+        .modal-slide-container .qr-img-box {
+            width: 82px !important;
+            height: 82px !important;
+        }
+
+        .modal-slide-container .qr-text-caption {
+            font-size: 13.5px !important;
+            line-height: 1.4 !important;
+        }
+
+        .modal-slide-container .tools-card-box {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 6px !important;
+        }
+
+        .modal-slide-container .tool-badge-pill {
+            font-size: 12.5px !important;
+            padding: 5.5px 11px !important;
+            border-radius: 6px !important;
+            gap: 6px !important;
+        }
+
+        .modal-slide-container .skills-card-box {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 6px !important;
+        }
+
+        .modal-slide-container .skill-pill-item {
+            font-size: 12px !important;
+            padding: 4.5px 11px !important;
+        }
+
+        /* SLIDE 4 MODAL (SAMBER REDJEKI) */
+        .modal-slide-container .roles-company-banner {
+            padding: 14px 20px !important;
+            border-radius: 12px !important;
+            margin-bottom: 14px !important;
+            border-left-width: 6px !important;
+        }
+
+        .modal-slide-container .roles-company-name {
+            font-size: 20px !important;
+            font-weight: 900 !important;
+        }
+
+        .modal-slide-container .roles-company-title {
+            font-size: 16px !important;
+            margin-top: 2px !important;
+        }
+
+        .modal-slide-container .roles-company-badge {
+            font-size: 14px !important;
+            padding: 6px 12px !important;
+            border-radius: 8px !important;
+            gap: 6px !important;
+        }
+
+        .modal-slide-container .roles-list-group {
+            gap: 12px !important;
+        }
+
+        .modal-slide-container .role-desc-card {
+            padding: 14px 18px !important;
+            border-radius: 12px !important;
+            gap: 16px !important;
+            border-width: 1.5px !important;
+        }
+
+        .modal-slide-container .role-icon-col {
+            width: 44px !important;
+            height: 44px !important;
+            border-radius: 10px !important;
+            font-size: 20px !important;
+        }
+
+        .modal-slide-container .role-text-headline {
+            font-size: 16.5px !important;
+            font-weight: 800 !important;
+            margin-bottom: 3px !important;
+            color: var(--navy-primary) !important;
+        }
+
+        .modal-slide-container .role-text-col p {
+            font-size: 14.5px !important;
+            line-height: 1.6 !important;
+            color: #334155 !important;
+        }
+
+        .modal-slide-container .roles-tag-footer {
+            gap: 10px !important;
+            margin-top: 14px !important;
+        }
+
+        .modal-slide-container .role-pill-tag {
+            font-size: 13px !important;
+            padding: 6px 14px !important;
+            border-radius: 6px !important;
+        }
+
+        /* SLIDE 5 MODAL (TITI JAYA & POWER CLUB - PAS, TIDAK KEPOTONG & TETAP JELAS) */
+        .modal-slide-container .slide-5-body {
+            padding: 16px 30px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            gap: 6px !important;
+        }
+
+        .modal-slide-container .slide-5-body .roles-company-banner {
+            padding: 6px 14px !important;
+            margin-bottom: 2px !important;
+            border-radius: 6px !important;
+            border-left-width: 4px !important;
+        }
+
+        .modal-slide-container .slide-5-body .comp-banner-2 {
+            margin-top: 8px !important;
+        }
+
+        .modal-slide-container .slide-5-body .roles-company-name {
+            font-size: 15px !important;
+            font-weight: 800 !important;
+        }
+
+        .modal-slide-container .slide-5-body .roles-company-title {
+            font-size: 13px !important;
+            font-weight: 700 !important;
+        }
+
+        .modal-slide-container .slide-5-body .roles-company-badge {
+            font-size: 11.5px !important;
+            padding: 3px 8px !important;
+            border-radius: 5px !important;
+            gap: 4px !important;
+        }
+
+        .modal-slide-container .slide-5-body .roles-list-group {
+            gap: 5px !important;
+        }
+
+        .modal-slide-container .slide-5-body .role-desc-card {
+            padding: 7px 14px !important;
+            border-radius: 8px !important;
+            gap: 12px !important;
+            border-width: 1px !important;
+        }
+
+        .modal-slide-container .slide-5-body .role-icon-col {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 6px !important;
+            font-size: 15px !important;
+        }
+
+        .modal-slide-container .slide-5-body .role-text-headline {
+            font-size: 13.5px !important;
+            font-weight: 800 !important;
+            margin-bottom: 1px !important;
+            color: var(--navy-primary) !important;
+        }
+
+        .modal-slide-container .slide-5-body .role-text-col p {
+            font-size: 12.5px !important;
+            line-height: 1.4 !important;
+            color: #334155 !important;
+        }
+
+        /* SLIDE 6 MODAL (BPVP SURAKARTA PELATIHAN KERJA) */
+        .modal-slide-container .slide-6-body {
+            padding: 16px 30px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            gap: 10px !important;
+        }
+
+        .modal-slide-container .slide-6-body .roles-company-banner {
+            padding: 8px 16px !important;
+            margin-bottom: 6px !important;
+            border-radius: 6px !important;
+            border-left-width: 4px !important;
+        }
+
+        .modal-slide-container .slide-6-body .roles-company-name {
+            font-size: 16px !important;
+            font-weight: 800 !important;
+        }
+
+        .modal-slide-container .slide-6-body .roles-company-title {
+            font-size: 13.5px !important;
+            font-weight: 700 !important;
+        }
+
+        .modal-slide-container .slide-6-body .roles-company-badge {
+            font-size: 12px !important;
+            padding: 4px 10px !important;
+            border-radius: 5px !important;
+            gap: 6px !important;
+        }
+
+        .modal-slide-container .bpvp-split-layout {
+            display: grid !important;
+            grid-template-columns: 1fr 220px !important;
+            gap: 24px !important;
+            align-items: flex-start !important;
+            flex: 1 !important;
+        }
+
+        .modal-slide-container .bpvp-bullets-col {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 5px !important;
+            justify-content: flex-start !important;
+        }
+
+        .modal-slide-container .bpvp-bullets-col .role-desc-card {
+            padding: 6px 12px !important;
+            border-radius: 8px !important;
+            gap: 10px !important;
+            border-width: 1px !important;
+        }
+
+        .modal-slide-container .bpvp-bullets-col .role-icon-col {
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 6px !important;
+            font-size: 13px !important;
+        }
+
+        .modal-slide-container .bpvp-bullets-col .role-text-headline {
+            font-size: 12.5px !important;
+            font-weight: 800 !important;
+            margin-bottom: 1px !important;
+            color: var(--navy-primary) !important;
+            line-height: 1.25 !important;
+        }
+
+        .modal-slide-container .bpvp-bullets-col .role-text-col p {
+            font-size: 11px !important;
+            line-height: 1.35 !important;
+            color: #334155 !important;
+            margin: 0 !important;
+        }
+
+        .modal-slide-container .bpvp-cert-card {
+            background: #F0FDFA !important;
+            border: 1.5px solid rgba(13, 148, 136, 0.4) !important;
+            border-radius: 8px !important;
+            padding: 8px 14px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            text-decoration: none !important;
+            transition: all 0.2s ease !important;
+            margin-top: 14px !important;
+        }
+
+        .modal-slide-container .bpvp-cert-card:hover {
+            background: #CCFBF1 !important;
+            border-color: var(--teal-primary) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .modal-slide-container .bpvp-cert-icon {
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 6px !important;
+            background: rgba(13, 148, 136, 0.12) !important;
+            color: var(--teal-primary) !important;
+            font-size: 14px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+        }
+
+        .modal-slide-container .bpvp-cert-title {
+            font-weight: 800 !important;
+            font-size: 12.5px !important;
+            color: var(--navy-primary) !important;
+            line-height: 1.25 !important;
+        }
+
+        .modal-slide-container .bpvp-cert-subtitle {
+            font-size: 10.5px !important;
+            color: #64748B !important;
+            margin-top: 1px !important;
+        }
+
+        .modal-slide-container .bpvp-cert-badge-link {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            background: var(--teal-primary) !important;
+            color: #FFFFFF !important;
+            padding: 5px 10px !important;
+            border-radius: 5px !important;
+            font-size: 11px !important;
+            font-weight: 800 !important;
+            margin-left: auto !important;
+            flex-shrink: 0 !important;
+            transition: background 0.2s ease !important;
+        }
+
+        .modal-slide-container .bpvp-cert-badge-link:hover {
+            background: var(--navy-primary) !important;
+        }
+
+        .modal-slide-container .bpvp-visual-col {
+            display: flex !important;
+            align-items: flex-start !important;
+            justify-content: center !important;
+            height: 100% !important;
+        }
+
+        .modal-slide-container .bpvp-photo-box {
+            width: 216px !important;
+            height: 384px !important;
+            aspect-ratio: 576 / 1024 !important;
+            border-radius: 12px !important;
+            overflow: hidden !important;
+            border: 2.5px solid var(--teal-light) !important;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18) !important;
+            position: relative !important;
+            background: #0F172A !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .modal-slide-container .bpvp-photo-box img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            display: block !important;
+        }
+
+        /* SLIDE 7 MODAL (SERTIFIKASI BNSP) */
+        .modal-slide-container .cert-container {
+            grid-template-columns: 1fr 240px !important;
+            gap: 26px !important;
+            align-items: center !important;
+            height: 100% !important;
+        }
+
+        .modal-slide-container .cert-item {
+            padding: 13px 18px !important;
+            border-left-width: 5px !important;
+            margin-bottom: 12px !important;
+            border-radius: 0 10px 10px 0 !important;
+            background: #F8FAFC !important;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+        }
+
+        .modal-slide-container .cert-item.cert-jwp {
+            border-left-color: #0284C7 !important;
+            background: #F0F9FF !important;
+            border-left-width: 5px !important;
+        }
+
+        .modal-slide-container .cert-badge-row {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            margin-bottom: 4px !important;
+        }
+
+        .modal-slide-container .cert-badge-tag {
+            font-size: 11px !important;
+            font-weight: 800 !important;
+            padding: 3px 8px !important;
+            border-radius: 4px !important;
+        }
+
+        .modal-slide-container .cert-badge-tag.tag-blue {
+            background: rgba(2, 132, 199, 0.15) !important;
+            color: #0284C7 !important;
+        }
+
+        .modal-slide-container .cert-id-tag {
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            color: #64748B !important;
+            background: rgba(100, 116, 139, 0.1) !important;
+            padding: 3px 8px !important;
+            border-radius: 4px !important;
+        }
+
+        .modal-slide-container .cert-name {
+            font-size: 16px !important;
+            font-weight: 900 !important;
+            color: var(--navy-primary) !important;
+            line-height: 1.3 !important;
+        }
+
+        .modal-slide-container .cert-desc {
+            font-size: 12px !important;
+            line-height: 1.45 !important;
+            color: #334155 !important;
+            margin-top: 4px !important;
+            margin-bottom: 8px !important;
+        }
+
+        .modal-slide-container .cert-card-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            font-size: 11.5px !important;
+            font-weight: 800 !important;
+            color: #FFFFFF !important;
+            background: var(--teal-primary) !important;
+            padding: 5px 12px !important;
+            border-radius: 6px !important;
+            text-decoration: none !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 2px 6px rgba(13, 148, 136, 0.25) !important;
+        }
+
+        .modal-slide-container .cert-card-btn:hover {
+            background: var(--navy-primary) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .modal-slide-container .cert-card-btn.btn-blue {
+            background: #0284C7 !important;
+            box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;
+        }
+
+        .modal-slide-container .cert-card-btn.btn-blue:hover {
+            background: var(--navy-primary) !important;
+        }
+
+        .modal-slide-container .cert-doc-card {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            text-decoration: none !important;
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 12px !important;
+            padding: 8px !important;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12) !important;
+            transition: all 0.25s ease !important;
+            cursor: pointer !important;
+        }
+
+        .modal-slide-container .cert-doc-card:hover {
+            border-color: #0284C7 !important;
+            transform: translateY(-4px) !important;
+            box-shadow: 0 15px 30px rgba(2, 132, 199, 0.22) !important;
+        }
+
+        .modal-slide-container .cert-doc-preview-wrapper {
+            width: 100% !important;
+            height: 295px !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            position: relative !important;
+            background: #F8FAFC !important;
+            border: 1px solid #E2E8F0 !important;
+        }
+
+        .modal-slide-container .cert-doc-img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+            background: #FFFFFF !important;
+        }
+
+        .modal-slide-container .cert-doc-hover-pill {
+            display: inline-flex !important;
+            position: absolute !important;
+            bottom: 10px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            background: rgba(15, 23, 42, 0.88) !important;
+            backdrop-filter: blur(4px) !important;
+            color: #FFFFFF !important;
+            font-size: 11px !important;
+            font-weight: 800 !important;
+            padding: 5px 12px !important;
+            border-radius: 20px !important;
+            gap: 6px !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+            white-space: nowrap !important;
+        }
+
+        .modal-slide-container .cert-doc-card:hover .cert-doc-hover-pill {
+            background: #0284C7 !important;
+        }
+
+        .modal-slide-container .cert-doc-footer {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            margin-top: 8px !important;
+            width: 100% !important;
+            padding: 2px 4px !important;
+        }
+
+        .modal-slide-container .seal-badge-mini {
+            width: 30px !important;
+            height: 30px !important;
+            background: linear-gradient(135deg, #F59E0B, #D97706) !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: #FFFFFF !important;
+            font-size: 13px !important;
+            flex-shrink: 0 !important;
+            border: 2px solid #FEF3C7 !important;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.3) !important;
+        }
+
+        .modal-slide-container .cert-doc-footer-title {
+            font-size: 11px !important;
+            font-weight: 900 !important;
+            color: var(--navy-primary) !important;
+            line-height: 1.2 !important;
+        }
+
+        .modal-slide-container .cert-doc-footer-id {
+            font-size: 9.5px !important;
+            color: #64748B !important;
+            font-weight: 600 !important;
+        }
+
+        .modal-slide-container .seal-badge {
+            width: 80px !important;
+            height: 80px !important;
+            font-size: 36px !important;
+        }
+
+        .modal-slide-container .seal-text {
+            font-size: 14px !important;
+            margin-top: 8px !important;
+        }
+
+        /* SLIDE 8 MODAL (KEAHLIAN UTAMA & CLOSING) */
+        .modal-slide-container .skills-column-header {
+            font-size: 17px !important;
+            border-bottom-width: 3px !important;
+            padding-bottom: 6px !important;
+            margin-bottom: 12px !important;
+        }
+
+        .modal-slide-container .skill-tag-container {
+            gap: 8px !important;
+        }
+
+        .modal-slide-container .skill-tag {
+            font-size: 14px !important;
+            padding: 7px 14px !important;
+            border-radius: 6px !important;
+        }
+
+        .modal-slide-container .callout-banner {
+            font-size: 18px !important;
+            padding: 14px !important;
+            border-radius: 8px !important;
+            letter-spacing: 1.5px !important;
+        }
+
+        /* SLIDE 9 MODAL (THANK YOU & INTERACTIVE CONTACT LIST) */
+        .modal-slide-container .slide-9-left {
+            padding: 40px 0 34px 44px !important;
+            justify-content: space-between !important;
+        }
+
+        .modal-slide-container .slide-9-headline-box {
+            display: flex !important;
+            align-items: flex-start !important;
+        }
+
+        .modal-slide-container .slide-9-headline {
+            font-size: 64px !important;
+            font-weight: 900 !important;
+            color: var(--navy-primary) !important;
+            line-height: 1.0 !important;
+            letter-spacing: -1.2px !important;
+        }
+
+        .modal-slide-container .slide-9-contact-section {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+            max-width: 440px !important;
+        }
+
+        .modal-slide-container .slide-9-subheadline {
+            font-size: 14px !important;
+            font-weight: 800 !important;
+            color: var(--teal-primary) !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            margin-bottom: 2px !important;
+        }
+
+        .modal-slide-container .slide-9-contact-cards {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 11px !important;
+            max-width: 440px !important;
+        }
+
+        .modal-slide-container .slide-9-contact-link {
+            display: flex !important;
+            align-items: center !important;
+            gap: 14px !important;
+            padding: 10px 16px !important;
+            border-radius: 10px !important;
+            background: #F8FAFC !important;
+            border: 1.5px solid #E2E8F0 !important;
+            text-decoration: none !important;
+            transition: all 0.25s ease !important;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03) !important;
+        }
+
+        .modal-slide-container .slide-9-contact-link:hover {
+            background: #F0FDFA !important;
+            border-color: var(--teal-primary) !important;
+            transform: translateX(6px) !important;
+            box-shadow: 0 4px 14px rgba(13, 148, 136, 0.18) !important;
+        }
+
+        .modal-slide-container .slide-9-contact-link .contact-icon-box {
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 8px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 18px !important;
+            color: #FFFFFF !important;
+            flex-shrink: 0 !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+        }
+
+        .modal-slide-container .slide-9-contact-link .contact-info-box {
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 !important;
+        }
+
+        .modal-slide-container .slide-9-contact-link .contact-platform {
+            display: block !important;
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            color: #64748B !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+
+        .modal-slide-container .slide-9-contact-link .contact-value {
+            font-size: 14.5px !important;
+            font-weight: 800 !important;
+            color: var(--navy-primary) !important;
+            line-height: 1.25 !important;
+        }
+
+        .modal-slide-container .slide-9-contact-link .contact-action-icon {
+            display: flex !important;
+            font-size: 13px !important;
+            color: #94A3B8 !important;
+            margin-left: auto !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .modal-slide-container .slide-9-contact-link:hover .contact-action-icon {
+            color: var(--teal-primary) !important;
+            transform: scale(1.15) !important;
+        }
+
+        .modal-slide-container .slide-9-right {
+            border-bottom-left-radius: 50px !important;
+            padding: 24px !important;
+        }
+
+        .modal-slide-container .slide-9-photo {
+            width: 90% !important;
+            height: 92% !important;
+            object-fit: cover !important;
+            object-position: center 15% !important;
+            border-radius: 16px !important;
+            border: 3.5px solid var(--teal-light) !important;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.35) !important;
+        }
+
+        /* Modal Side Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(15, 23, 42, 0.7);
+            color: #FFFFFF;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .nav-arrow:hover {
+            background: var(--teal-primary);
+            border-color: var(--teal-light);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow-left { left: 20px; }
+        .nav-arrow-right { right: 20px; }
+
+        /* ============================================== */
+        /* RESPONSIVE SMARTPHONE OPTIMIZATION (MAX 768PX) */
+        /* ============================================== */
+        @media (max-width: 768px) {
+            /* 1. Global Page Layout on Mobile */
+            body {
+                padding: 12px 10px 40px 10px;
+            }
+
+            .header-title-box h1 {
+                font-size: 24px;
+                letter-spacing: 1px;
+            }
+
+            .instruction-badge {
+                font-size: 11px;
+                padding: 6px 14px;
+                text-align: center;
+                line-height: 1.4;
+            }
+
+            .workspace-grid {
+                gap: 16px;
+                width: 100%;
+            }
+
+            /* Feed Slide Cards on Mobile */
+            .slide-card {
+                aspect-ratio: auto;
+                min-height: 220px;
+                padding-bottom: 8px;
+            }
+
+            /* 2. Modal Toolbar & Overlays on Mobile */
+            .modal-overlay {
+                padding: 10px 8px;
+            }
+
+            .modal-toolbar {
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 8px;
+                width: 100%;
+            }
+
+            .modal-counter {
+                font-size: 11.5px;
+                padding: 4px 10px;
+            }
+
+            .modal-controls {
+                gap: 5px;
+                margin-left: auto;
+            }
+
+            .btn-modal {
+                padding: 5px 9px;
+                font-size: 11px;
+                border-radius: 6px;
+            }
+
+            .btn-close {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+
+            .modal-dots {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                overflow-x: auto;
+                padding-bottom: 3px;
+                gap: 5px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .btn-dot {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+                flex-shrink: 0;
+            }
+
+            /* Hide intrusive floating arrows on mobile */
+            .nav-arrow {
+                display: none !important;
+            }
+
+            /* 3. Modal Slide Container on Mobile (Scrollable Presentation Card) */
+            .modal-slide-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                max-height: calc(100vh - 100px) !important;
+                aspect-ratio: auto !important;
+                border-radius: 12px !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            .modal-slide-container .slide-header {
+                padding: 10px 14px !important;
+            }
+
+            .modal-slide-container .slide-header h2 {
+                font-size: 14.5px !important;
+                gap: 8px !important;
+            }
+
+            .modal-slide-container .slide-header h2::before {
+                width: 4px !important;
+                height: 15px !important;
+            }
+
+            .modal-slide-container .slide-header-tag {
+                font-size: 10.5px !important;
+                padding: 3px 8px !important;
+            }
+
+            .modal-slide-container .slide-body {
+                padding: 14px 14px 20px 14px !important;
+                font-size: 13px !important;
+                line-height: 1.5 !important;
+            }
+
+            /* SLIDE 1 MODAL (MOBILE) */
+            .modal-slide-container .slide-1-content {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 14px !important;
+            }
+
+            .modal-slide-container .slide-1-left {
+                padding: 14px !important;
+                gap: 10px !important;
+            }
+
+            .modal-slide-container .slide-1-title h2 {
+                font-size: 24px !important;
+                line-height: 1.1 !important;
+            }
+
+            .modal-slide-container .slide-1-title h3 {
+                font-size: 17px !important;
+            }
+
+            .modal-slide-container .role-pill {
+                font-size: 11px !important;
+                padding: 4px 10px !important;
+            }
+
+            .modal-slide-container .career-focus-badge {
+                font-size: 10px !important;
+                padding: 4px 10px !important;
+            }
+
+            .modal-slide-container .cover-competency-grid {
+                grid-template-columns: 1fr !important;
+                gap: 6px !important;
+            }
+
+            .modal-slide-container .cover-comp-header {
+                font-size: 9.5px !important;
+            }
+
+            .modal-slide-container .cover-comp-list li {
+                font-size: 9.5px !important;
+            }
+
+            .modal-slide-container .contact-item {
+                font-size: 12px !important;
+            }
+
+            .modal-slide-container .slide-1-right {
+                height: 200px !important;
+                border-bottom-left-radius: 20px !important;
+                padding: 12px !important;
+            }
+
+            .modal-slide-container .slide-1-photo {
+                width: 150px !important;
+                height: 180px !important;
+                object-fit: cover !important;
+            }
+
+            /* SLIDE 2 MODAL (MOBILE) */
+            .modal-slide-container .about-split-content {
+                grid-template-columns: 1fr !important;
+                gap: 14px !important;
+                margin-bottom: 14px !important;
+            }
+
+            .modal-slide-container .about-photo-col {
+                order: -1 !important;
+            }
+
+            .modal-slide-container .about-photo-img {
+                max-width: 120px !important;
+                height: 135px !important;
+            }
+
+            .modal-slide-container .about-text {
+                font-size: 13px !important;
+                line-height: 1.6 !important;
+            }
+
+            .modal-slide-container .highlights-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+            }
+
+            .modal-slide-container .highlight-card {
+                padding: 8px 5px !important;
+            }
+
+            .modal-slide-container .highlight-card i {
+                font-size: 20px !important;
+            }
+
+            .modal-slide-container .highlight-title {
+                font-size: 13px !important;
+            }
+
+            .modal-slide-container .highlight-desc {
+                font-size: 9.5px !important;
+            }
+
+            /* SLIDE 3 MODAL (MOBILE) */
+            .modal-slide-container[data-slide="3"] .slide-body {
+                padding: 14px !important;
+            }
+
+            .modal-slide-container .slide-3-body-grid {
+                grid-template-columns: 1fr !important;
+                gap: 14px !important;
+            }
+
+            .modal-slide-container .edu-mini-card {
+                padding: 8px 10px !important;
+            }
+
+            .modal-slide-container .edu-mini-name {
+                font-size: 13px !important;
+            }
+
+            .modal-slide-container .edu-mini-sub {
+                font-size: 11.5px !important;
+            }
+
+            .modal-slide-container .exp-mini-date {
+                font-size: 11px !important;
+            }
+
+            .modal-slide-container .exp-mini-company {
+                font-size: 13px !important;
+            }
+
+            .modal-slide-container .exp-mini-role {
+                font-size: 12px !important;
+            }
+
+            .modal-slide-container .qr-card-container {
+                padding: 10px 12px !important;
+                gap: 12px !important;
+            }
+
+            .modal-slide-container .qr-img-box {
+                width: 65px !important;
+                height: 65px !important;
+            }
+
+            .modal-slide-container .qr-text-caption {
+                font-size: 12px !important;
+            }
+
+            .modal-slide-container .tool-badge-pill {
+                font-size: 11px !important;
+                padding: 4px 8px !important;
+            }
+
+            .modal-slide-container .skill-pill-item {
+                font-size: 11px !important;
+                padding: 4px 8px !important;
+            }
+
+            /* SLIDE 4 & 5 MODAL (MOBILE) */
+            .modal-slide-container .roles-company-banner {
+                padding: 10px 14px !important;
+                margin-bottom: 10px !important;
+            }
+
+            .modal-slide-container .roles-company-name {
+                font-size: 16px !important;
+            }
+
+            .modal-slide-container .roles-company-title {
+                font-size: 13px !important;
+            }
+
+            .modal-slide-container .roles-task-card {
+                padding: 10px 12px !important;
+                margin-bottom: 8px !important;
+            }
+
+            .modal-slide-container .roles-task-title {
+                font-size: 13px !important;
+            }
+
+            .modal-slide-container .roles-task-desc {
+                font-size: 12px !important;
+            }
+
+            .modal-slide-container .slide-5-wrapper {
+                gap: 10px !important;
+            }
+
+            .modal-slide-container .slide-5-grid {
+                grid-template-columns: 1fr !important;
+                gap: 8px !important;
+            }
+
+            /* SLIDE 6 MODAL (MOBILE - BPVP TRAINING) */
+            .modal-slide-container .bpvp-container {
+                grid-template-columns: 1fr !important;
+                gap: 14px !important;
+            }
+
+            .modal-slide-container .bpvp-photo-box {
+                width: 100% !important;
+                max-width: 180px !important;
+                height: auto !important;
+                aspect-ratio: 576 / 1024 !important;
+                margin: 0 auto !important;
+            }
+
+            .modal-slide-container .bpvp-item {
+                padding: 8px 10px !important;
+            }
+
+            .modal-slide-container .bpvp-item-title {
+                font-size: 12.5px !important;
+            }
+
+            .modal-slide-container .bpvp-item-desc {
+                font-size: 11.5px !important;
+            }
+
+            /* SLIDE 7 MODAL (MOBILE - CERTIFICATIONS) */
+            .modal-slide-container .cert-container {
+                grid-template-columns: 1fr !important;
+                gap: 14px !important;
+            }
+
+            .modal-slide-container .cert-item {
+                padding: 10px 12px !important;
+                margin-bottom: 8px !important;
+            }
+
+            .modal-slide-container .cert-title {
+                font-size: 13px !important;
+            }
+
+            .modal-slide-container .cert-desc {
+                font-size: 11.5px !important;
+            }
+
+            .modal-slide-container .cert-doc-preview-wrapper {
+                height: 200px !important;
+            }
+
+            /* SLIDE 8 MODAL (MOBILE - CORE COMPETENCIES) */
+            .modal-slide-container .skills-columns-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+
+            .modal-slide-container .skills-column-header {
+                font-size: 14px !important;
+            }
+
+            .modal-slide-container .skill-tag {
+                font-size: 11.5px !important;
+                padding: 5px 10px !important;
+            }
+
+            .modal-slide-container .callout-banner {
+                font-size: 14px !important;
+                padding: 10px !important;
+            }
+
+            /* SLIDE 9 MODAL (MOBILE - THANK YOU & CONTACT) */
+            .modal-slide-container .slide-9-content {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 14px !important;
+            }
+
+            .modal-slide-container .slide-9-left {
+                padding: 14px !important;
+            }
+
+            .modal-slide-container .slide-9-headline {
+                font-size: 38px !important;
+                letter-spacing: -0.5px !important;
+            }
+
+            .modal-slide-container .slide-9-subheadline {
+                font-size: 12px !important;
+            }
+
+            .modal-slide-container .slide-9-contact-cards {
+                gap: 8px !important;
+            }
+
+            .modal-slide-container .slide-9-contact-link {
+                padding: 8px 12px !important;
+                gap: 10px !important;
+            }
+
+            .modal-slide-container .contact-value {
+                font-size: 12px !important;
+            }
+
+            .modal-slide-container .slide-9-right {
+                height: 180px !important;
+                border-bottom-left-radius: 20px !important;
+                padding: 12px !important;
+            }
+
+            .modal-slide-container .slide-9-photo {
+                width: 140px !important;
+                height: 160px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Minimalist Desk Accents -->
+    <svg class="desk-accent-leaf-top" viewBox="0 0 100 100" fill="none">
+        <path d="M10 90 Q 50 10 90 10 Q 90 50 10 90 Z" fill="#22C55E" opacity="0.3"/>
+        <path d="M20 80 Q 55 25 80 25 Q 75 55 20 80 Z" fill="#16A34A" opacity="0.4"/>
+    </svg>
+    <svg class="desk-accent-leaf-bottom" viewBox="0 0 100 100" fill="none">
+        <path d="M10 90 Q 50 10 90 10 Q 90 50 10 90 Z" fill="#15803D" opacity="0.3"/>
+    </svg>
+    <div class="desk-pen"></div>
+
+    <!-- Main Title Banner -->
+    <header class="header-title-box">
+        <h1>MARIA ROSARIO</h1>
+        <div class="instruction-badge">
+            <i class="fa-solid fa-hand-pointer"></i> Klik pada slide mana saja untuk menampilkan <strong>SLIDE UTUH PRESENTASI</strong>
+        </div>
+    </header>
+
+    <!-- Canvas Grid Container (8 Slides Berbaris Rapi) -->
+    <main class="workspace-grid">
+
+        <!-- ============================================== -->
+        <!-- SLIDE 1 (COVER)                                -->
+        <!-- ============================================== -->
+        <div class="slide-card" onclick="openModal(1)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-1-content">
+                <div class="slide-1-left">
+                    <div>
+                        <div class="slide-1-title">
+                            <h2>PORTOFOLIO</h2>
+                            <h3>MARIA ROSARIO</h3>
+                        </div>
+                        <div class="role-pill">
+                            ADMINISTRASI, DATA & CUSTOMER SERVICE
+                        </div>
+                    </div>
+
+                    <!-- LinkedIn Branding Competency Section -->
+                    <div class="cover-competency-section">
+                        <div class="career-focus-wrapper">
+                            <span class="career-focus-badge">
+                                <i class="fa-solid fa-briefcase"></i> OFFICE ADMINISTRATION & DATA MANAGEMENT
+                            </span>
+                        </div>
+                        <div class="cover-competency-grid">
+                            <div class="cover-comp-col">
+                                <div class="cover-comp-header">OFFICE ADMIN</div>
+                                <ul class="cover-comp-list">
+                                    <li><i class="fa-solid fa-circle comp-dot"></i> <span>Business Correspondence</span></li>
+                                    <li><i class="fa-solid fa-circle comp-dot"></i> <span>Document Archiving</span></li>
+                                    <li><i class="fa-solid fa-circle comp-dot"></i> <span>Microsoft Office Suite</span></li>
+                                </ul>
+                            </div>
+                            <div class="cover-comp-col">
+                                <div class="cover-comp-header">DATA & SYSTEM</div>
+                                <ul class="cover-comp-list">
+                                    <li><i class="fa-solid fa-circle comp-dot"></i> <span>Data Entry & Management</span></li>
+                                    <li><i class="fa-solid fa-circle comp-dot"></i> <span>Database Systems</span></li>
+                                </ul>
+                            </div>
+                            <div class="cover-comp-col">
+                                <div class="cover-comp-header">OPERATIONS</div>
+                                <ul class="cover-comp-list">
+                                    <li><i class="fa-solid fa-circle comp-dot"></i> <span>Time Management</span></li>
+                                    <li><i class="fa-solid fa-circle comp-dot"></i> <span>Effective Communication</span></li>
+                                    <li><i class="fa-solid fa-circle comp-dot"></i> <span>Team Collaboration</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="contact-list">
+                        <li class="contact-item"><i class="fa-brands fa-whatsapp" style="color: #25D366;"></i> <a href="https://wa.me/6287836023264" target="_blank">+65 878-3602-3264</a></li>
+                        <li class="contact-item"><i class="fa-solid fa-envelope"></i> <a href="mailto:maria.rosario44551@gmail.com">maria.rosario44551@gmail.com</a></li>
+                        <li class="contact-item"><i class="fa-brands fa-linkedin"></i> <a href="https://www.linkedin.com/in/mariarosario99/" target="_blank">linkedin.com/in/mariarosario99</a></li>
+                    </ul>
+                </div>
+                <div class="slide-1-right">
+                    <img src="maria_profile_new.jpg" alt="Maria Rosario" class="slide-1-photo">
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 1</div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SLIDE 2 (TENTANG SAYA)                         -->
+        <!-- ============================================== -->
+        <div class="slide-card" onclick="openModal(2)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>ABOUT ME</h2>
+            </div>
+            <div class="slide-body">
+                <div class="about-split-content">
+                    <div class="about-text-col">
+                        <p class="about-text" id="intro_paragraph">
+                            Halo, saya <strong>Maria Rosario</strong> dari Karanganyar. Sebagai lulusan S1 Sistem Informasi Universitas Duta Bangsa Surakarta tahun 2026 (IPK 3.67), saya memadukan kemampuan analitis akademis dengan 2 tahun pengalaman praktis di industri ritel sebagai Admin Operasional & Customer Service. Terbiasa menangani manajemen pesanan, pengelolaan data penjualan, serta rekapitulasi pelaporan menggunakan spreadsheet untuk mendukung kelancaran operasional bisnis.
+                        </p>
+                        <p class="about-text">
+                            Didukung kemampuan komunikasi yang efektif, adaptif bekerja dalam tim maupun secara mandiri, dan selalu berorientasi pada pencapaian target, saat ini saya antusias memfokuskan pengembangan karier di bidang administrasi perkantoran, manajemen data elektronik, dan dukungan operasional bisnis.
+                        </p>
+                    </div>
+                    <div class="about-photo-col">
+                        <img src="maria_formal_photo.png" alt="Maria Rosario - Foto Profesional" class="about-photo-img">
+                    </div>
+                </div>
+                <div class="highlights-grid">
+                    <div class="highlight-card">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <div class="highlight-title">IPK 3.67</div>
+                        <div class="highlight-desc">Skala 4.00</div>
+                    </div>
+                    <div class="highlight-card">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <div class="highlight-title">2+ Tahun</div>
+                        <div class="highlight-desc">Pengalaman</div>
+                    </div>
+                    <div class="highlight-card">
+                        <i class="fa-solid fa-award"></i>
+                        <div class="highlight-title">2 Sertifikat</div>
+                        <div class="highlight-desc">BNSP</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 2</div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SLIDE 3 (PENDIDIKAN, PENGALAMAN, TOOLS & SKILLS) -->
+        <!-- ============================================== -->
+        <div class="slide-card" onclick="openModal(3)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>EDUCATION & EXPERIENCE</h2>
+            </div>
+            <div class="slide-body">
+                <div class="slide-3-body-grid">
+                    <!-- Left Column: Edu & Exp -->
+                    <div class="resume-panel">
+                        <div class="resume-sub-header">
+                            <i class="fa-solid fa-graduation-cap"></i> EDUCATION
+                        </div>
+                        <div class="edu-box-row">
+                            <div class="edu-mini-card">
+                                <div>
+                                    <div class="edu-mini-name">SMA Negeri 8 Surakarta</div>
+                                    <div class="edu-mini-sub">Ilmu Pengetahuan Sosial (IPS)</div>
+                                </div>
+                                <span class="edu-mini-year"><i class="fa-solid fa-check"></i> 2019 - 2022</span>
+                            </div>
+
+                            <div class="edu-mini-card">
+                                <div>
+                                    <div class="edu-mini-name">Universitas Duta Bangsa</div>
+                                    <div class="edu-mini-sub">S1 Sistem Informasi</div>
+                                </div>
+                                <div style="display: flex; gap: 4px; align-items: center;">
+                                    <span class="edu-mini-year"><i class="fa-solid fa-check"></i> 2022 - 2026</span>
+                                    <span class="edu-mini-gpa">IPK 3.67</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="resume-sub-header" style="margin-top: 4px;">
+                            <i class="fa-solid fa-briefcase"></i> EXPERIENCE
+                        </div>
+                        <div class="exp-mini-timeline">
+                            <div class="exp-mini-node">
+                                <span class="exp-mini-date">Oct 2024 - Oct 2026</span>
+                                <div class="exp-mini-company">SAMBER REDJEKI</div>
+                                <div class="exp-mini-role">Admin Operasional & Customer Service</div>
+                            </div>
+                            <div class="exp-mini-node">
+                                <span class="exp-mini-date">Jun 2024 - Aug 2024</span>
+                                <div class="exp-mini-company">TITI JAYA TEXTILE</div>
+                                <div class="exp-mini-role">Packing</div>
+                            </div>
+                            <div class="exp-mini-node">
+                                <span class="exp-mini-date">Dec 2023 - Apr 2024</span>
+                                <div class="exp-mini-company">POWER CLUB SOLO</div>
+                                <div class="exp-mini-role">Distributor / Consultant</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: QR, Tools & Skills -->
+                    <div class="resume-panel">
+                        <!-- QR Code Box (CV Link) -->
+                        <a href="CV - Maria Rosario.pdf" target="_blank" class="qr-card-container">
+                            <div class="qr-img-box">
+                                <img src="qr_cv.png" alt="QR Code CV Maria Rosario">
+                            </div>
+                            <div class="qr-text-caption">
+                                Klik atau scan untuk melihat <span>Curriculum Vitae saya</span>
+                            </div>
+                        </a>
+
+                        <!-- Tools Box -->
+                        <div class="tools-card-box">
+                            <div class="resume-sub-header" style="border: none; padding: 0;">
+                                <i class="fa-solid fa-toolbox"></i> TOOLS
+                            </div>
+                            <div class="tool-icon-row">
+                                <span class="tool-badge-pill"><i class="fa-solid fa-file-word" style="color: #2B579A;"></i> Ms. Word</span>
+                                <span class="tool-badge-pill"><i class="fa-solid fa-file-excel" style="color: #217346;"></i> Ms. Excel</span>
+                                <span class="tool-badge-pill"><i class="fa-solid fa-file-powerpoint" style="color: #D24726;"></i> PowerPoint</span>
+                                <span class="tool-badge-pill"><i class="fa-solid fa-file-lines" style="color: #4285F4;"></i> Google Doc</span>
+                                <span class="tool-badge-pill"><i class="fa-solid fa-table" style="color: #0F9D58;"></i> Spreadsheet</span>
+                                <span class="tool-badge-pill"><i class="fa-solid fa-palette" style="color: #00C4CC;"></i> Canva</span>
+                            </div>
+                        </div>
+
+                        <!-- Skills Box -->
+                        <div class="skills-card-box">
+                            <div class="resume-sub-header" style="border: none; padding: 0;">
+                                <i class="fa-solid fa-medal"></i> SKILLS
+                            </div>
+                            <div class="skill-tag-wrap">
+                                <span class="skill-pill-item">Data Administration</span>
+                                <span class="skill-pill-item">Customer Service</span>
+                                <span class="skill-pill-item">Order Fulfillment</span>
+                                <span class="skill-pill-item">Data Entry & Typing</span>
+                                <span class="skill-pill-item">Operasional Bisnis</span>
+                                <span class="skill-pill-item">Teliti & Detail</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 3</div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SLIDE 4 (ROLES & RESPONSIBILITIES)             -->
+        <!-- ============================================== -->
+        <div class="slide-card" onclick="openModal(4)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>ROLES & RESPONSIBILITIES 01</h2>
+                <span class="slide-header-tag">SAMBER REDJEKI</span>
+            </div>
+            <div class="slide-body">
+                <div class="roles-company-banner">
+                    <div>
+                        <div class="roles-company-name">SAMBER REDJEKI</div>
+                        <div class="roles-company-title">Admin Operasional & Customer Service</div>
+                    </div>
+                    <div class="roles-company-badge">
+                        <i class="fa-regular fa-calendar-check"></i> Oct 2024 - Oct 2026
+                    </div>
+                </div>
+
+                <div class="roles-list-group">
+                    <div class="role-desc-card">
+                        <div class="role-icon-col">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="role-text-col">
+                            <div class="role-text-headline">Laporan Finansial & Rekapitulasi Data</div>
+                            <p>Menyusun laporan cash flow operasional dan rekapitulasi data penjualan online maupun offline menggunakan spreadsheet.</p>
+                        </div>
+                    </div>
+
+                    <div class="role-desc-card">
+                        <div class="role-icon-col">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <div class="role-text-col">
+                            <div class="role-text-headline">Layanan Pelanggan & Performa Toko</div>
+                            <p>Menangani layanan pelanggan, komplain, mengelola ulasan, membalas chat, serta menjaga performa toko.</p>
+                        </div>
+                    </div>
+
+                    <div class="role-desc-card">
+                        <div class="role-icon-col">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <div class="role-text-col">
+                            <div class="role-text-headline">Promosi & Manajemen Katalog Produk</div>
+                            <p>Mendistribusikan materi promosi dan mengelola pembaruan katalog produk melalui media sosial.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="roles-tag-footer">
+                    <span class="role-pill-tag"><i class="fa-solid fa-check"></i> Cash Flow & Spreadsheet</span>
+                    <span class="role-pill-tag"><i class="fa-solid fa-check"></i> Complaint Handling</span>
+                    <span class="role-pill-tag"><i class="fa-solid fa-check"></i> Social Media & Store Ops</span>
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 4</div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SLIDE 5 (ROLES & RESPONSIBILITIES 02)          -->
+        <!-- ============================================== -->
+        <div class="slide-card" onclick="openModal(5)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>ROLES & RESPONSIBILITIES 02</h2>
+                <span class="slide-header-tag">TITI JAYA & POWER CLUB</span>
+            </div>
+            <div class="slide-body slide-5-body">
+                <!-- Company 1: TITI JAYA TEXTILE -->
+                <div class="roles-company-banner">
+                    <div>
+                        <div class="roles-company-name">TITI JAYA TEXTILE</div>
+                        <div class="roles-company-title">Packing & Quality Control (QC)</div>
+                    </div>
+                    <div class="roles-company-badge">
+                        <i class="fa-regular fa-calendar-check"></i> Jun - Aug 2024
+                    </div>
+                </div>
+                <div class="roles-list-group">
+                    <div class="role-desc-card">
+                        <div class="role-icon-col">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+                        <div class="role-text-col">
+                            <div class="role-text-headline">Verifikasi Pesanan & Quality Control (QC)</div>
+                            <p>Melakukan verifikasi pesanan dan proses QC spesifikasi produk (jenis, warna, dan ukuran kain) untuk memastikan keakuratan data daring dengan barang fisik.</p>
+                        </div>
+                    </div>
+                    <div class="role-desc-card">
+                        <div class="role-icon-col">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <div class="role-text-col">
+                            <div class="role-text-headline">Pengemasan Logistik Standar Pengiriman</div>
+                            <p>Menjalankan prosedur pengemasan (packing) logistik sesuai standar pengiriman untuk memastikan kelayakan dan keamanan produk hingga diterima pelanggan.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company 2: POWER CLUB SOLO -->
+                <div class="roles-company-banner comp-banner-2">
+                    <div>
+                        <div class="roles-company-name">POWER CLUB SOLO</div>
+                        <div class="roles-company-title">Distributor / Consultant</div>
+                    </div>
+                    <div class="roles-company-badge">
+                        <i class="fa-regular fa-calendar-check"></i> Dec 2023 - Apr 2024
+                    </div>
+                </div>
+                <div class="roles-list-group">
+                    <div class="role-desc-card">
+                        <div class="role-icon-col">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <div class="role-text-col">
+                            <div class="role-text-headline">Analisis Komposisi Tubuh Pelanggan</div>
+                            <p>Melakukan pengukuran dan analisis metrik komposisi tubuh pelanggan untuk merekomendasikan program kesehatan yang sesuai.</p>
+                        </div>
+                    </div>
+                    <div class="role-desc-card">
+                        <div class="role-icon-col">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="role-text-col">
+                            <div class="role-text-headline">Pemasaran Langsung (Direct Marketing)</div>
+                            <p>Memasarkan produk nutrisi dan mengakuisisi pelanggan baru melalui aktivitas direct marketing & konsultasi kebutuhan nutrisi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 5</div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SLIDE 6 (BPVP SURAKARTA PELATIHAN KERJA)      -->
+        <!-- ============================================== -->
+        <div class="slide-card" onclick="openModal(6)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>PROFESSIONAL TRAINING</h2>
+                <p>BPVP SURAKARTA - KEMENTERIAN KETENAGAKERJAAN RI</p>
+            </div>
+            <div class="slide-body slide-6-body">
+                <!-- Training Program Banner -->
+                <div class="roles-company-banner" style="margin-bottom: 6px;">
+                    <div>
+                        <div class="roles-company-name">Office Ready Skill Digital Advance</div>
+                        <div class="roles-company-title">BPVP Surakarta — Kemnaker RI</div>
+                    </div>
+                    <div class="roles-company-badge">
+                        <i class="fa-regular fa-clock"></i> 80 Jam Pelatihan (27 Agu - 5 Sep 2026)
+                    </div>
+                </div>
+
+                <!-- Split Content: Bullets & Cert Left, Full Uncropped Photo Right -->
+                <div class="bpvp-split-layout">
+                    <!-- Left: 4 Competency Bullets + Certificate Below -->
+                    <div class="bpvp-bullets-col">
+                        <div class="role-desc-card">
+                            <div class="role-icon-col">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <div class="role-text-col">
+                                <div class="role-text-headline">Pelatihan Vokasi Intensif 80 Jam</div>
+                                <p>Menyelesaikan 80 jam pelatihan vokasi intensif yang diselenggarakan resmi oleh BPVP Surakarta.</p>
+                            </div>
+                        </div>
+                        <div class="role-desc-card">
+                            <div class="role-icon-col">
+                                <i class="fa-solid fa-file-word"></i>
+                            </div>
+                            <div class="role-text-col">
+                                <div class="role-text-headline">Microsoft Word (Dasar & Lanjut)</div>
+                                <p>Menguasai penggunaan perangkat lunak pengolah kata (Microsoft Word) tingkat dasar dan lanjut.</p>
+                            </div>
+                        </div>
+                        <div class="role-desc-card">
+                            <div class="role-icon-col">
+                                <i class="fa-solid fa-file-excel"></i>
+                            </div>
+                            <div class="role-text-col">
+                                <div class="role-text-headline">Excel (Dasar & Lanjut)</div>
+                                <p>Menguasai pengelolaan, entri, dan analisis data menggunakan lembar sebar (Microsoft Excel) dasar & lanjut.</p>
+                            </div>
+                        </div>
+                        <div class="role-desc-card">
+                            <div class="role-icon-col">
+                                <i class="fa-solid fa-file-powerpoint"></i>
+                            </div>
+                            <div class="role-text-col">
+                                <div class="role-text-headline">PowerPoint (Dasar & Lanjut)</div>
+                                <p>Menguasai pembuatan materi visual menggunakan perangkat lunak presentasi (PowerPoint) tingkat dasar dan lanjut.</p>
+                            </div>
+                        </div>
+
+                        <!-- Sertifikat Kelulusan (di samping kiri bawah PowerPoint) -->
+                        <a href="Sertifikat_BPVP_Office_Ready.pdf" target="_blank" class="bpvp-cert-card" title="Lihat Sertifikat Kelulusan BPVP" onclick="event.stopPropagation()">
+                            <div class="bpvp-cert-icon">
+                                <i class="fa-solid fa-certificate"></i>
+                            </div>
+                            <div class="bpvp-cert-text">
+                                <div class="bpvp-cert-title">Sertifikat Kelulusan BPVP Surakarta</div>
+                                <div class="bpvp-cert-subtitle">Office Ready Skill Digital Advance — Kementerian Ketenagakerjaan RI</div>
+                            </div>
+                            <span class="bpvp-cert-badge-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka PDF</span>
+                        </a>
+                    </div>
+
+                    <!-- Right: Full Uncropped Photo -->
+                    <div class="bpvp-visual-col">
+                        <div class="bpvp-photo-box" title="Dokumentasi Pelatihan BPVP Surakarta">
+                            <img src="bpvp_training_photo.jpg" alt="Dokumentasi Pelatihan BPVP Surakarta">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 6</div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SLIDE 7 (SERTIFIKASI BNSP)                     -->
+        <!-- ============================================== -->
+        <div class="slide-card" onclick="openModal(7)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>CERTIFICATIONS</h2>
+            </div>
+            <div class="slide-body">
+                <div class="cert-container">
+                    <div>
+                        <!-- Card 1: Office Ready -->
+                        <div class="cert-item">
+                            <div class="cert-badge-row">
+                                <span class="cert-badge-tag"><i class="fa-solid fa-award"></i> BNSP & BPVP SURAKARTA</span>
+                            </div>
+                            <div class="cert-name">Office Ready Skill Digital Advanced (2026)</div>
+                            <div class="cert-desc">Disertifikasi oleh BNSP & BPVP Surakarta (Kemnaker RI) untuk kompetensi administrasi digital terpadu: Microsoft Word, Excel (Spreadsheet), dan PowerPoint tingkat lanjut.</div>
+                            <a href="Sertifikat_BPVP_Office_Ready.pdf" target="_blank" class="cert-card-btn" title="Lihat Dokumen Sertifikat BPVP Kemnaker" onclick="event.stopPropagation()">
+                                <i class="fa-solid fa-file-pdf"></i> Lihat Sertifikat BPVP <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
+
+                        <!-- Card 2: Junior Web Programmer -->
+                        <div class="cert-item cert-jwp" style="margin-bottom: 0;">
+                            <div class="cert-badge-row">
+                                <span class="cert-badge-tag tag-blue"><i class="fa-solid fa-code"></i> LSP TELEMATIKA (BNSP)</span>
+                                <span class="cert-id-tag">No. Reg: TIK.002 000191 2026</span>
+                            </div>
+                            <div class="cert-name">Junior Web Programmer (JWP) (2026)</div>
+                            <div class="cert-desc">Sertifikat Kompetensi resmi BNSP (No. 72202 3512 00191 2026) dalam 8 unit kompetensi: struktur data, user interface (UI), pemrograman terstruktur, standar best practices kode, modul library, dokumentasi kode, dan debugging.</div>
+                            <a href="Sertifikat_BNSP_Junior_Web_Programmer.pdf" target="_blank" class="cert-card-btn btn-blue" title="Lihat Dokumen Sertifikat BNSP Junior Web Programmer" onclick="event.stopPropagation()">
+                                <i class="fa-solid fa-file-pdf"></i> Lihat Sertifikat BNSP (PDF) <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Visual Preview of BNSP JWP Certificate -->
+                    <a href="Sertifikat_BNSP_Junior_Web_Programmer.pdf" target="_blank" class="cert-doc-card" title="Buka Dokumen Asli Sertifikat BNSP Junior Web Programmer (PDF)" onclick="event.stopPropagation()">
+                        <div class="cert-doc-preview-wrapper">
+                            <img src="sertifikat_bnsp_jwp_preview.png" alt="Sertifikat BNSP Junior Web Programmer - Maria Rosario" class="cert-doc-img">
+                            <div class="cert-doc-hover-pill">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka PDF Resmi
+                            </div>
+                        </div>
+                        <div class="cert-doc-footer">
+                            <div class="seal-badge-mini">
+                                <i class="fa-solid fa-ribbon"></i>
+                            </div>
+                            <div class="cert-doc-footer-text">
+                                <div class="cert-doc-footer-title">SERTIFIKAT RESMI BNSP</div>
+                                <div class="cert-doc-footer-id">Junior Web Programmer</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 7</div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SLIDE 8 (KEAHLIAN UTAMA & PENUTUP)            -->
+        <!-- ============================================== -->
+        <div class="slide-card" onclick="openModal(8)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-header">
+                <h2>CORE COMPETENCIES</h2>
+            </div>
+            <div class="slide-body">
+                <div class="skills-grid">
+                    <div>
+                        <div class="skills-column-header">HARD SKILLS</div>
+                        <div class="skill-tag-container">
+                            <span class="skill-tag">Data Admin</span>
+                            <span class="skill-tag">Spreadsheets</span>
+                            <span class="skill-tag">Data Entry & Typing</span>
+                            <span class="skill-tag">Microsoft Office</span>
+                            <span class="skill-tag">Google Workspace</span>
+                            <span class="skill-tag">Order Fulfillment</span>
+                            <span class="skill-tag">Inventory</span>
+                            <span class="skill-tag">Canva</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="skills-column-header">SOFT SKILLS</div>
+                        <div class="skill-tag-container">
+                            <span class="skill-tag">Teliti & Detail</span>
+                            <span class="skill-tag">Manajemen Waktu</span>
+                            <span class="skill-tag">Komunikatif</span>
+                            <span class="skill-tag">Mandiri & Tim</span>
+                            <span class="skill-tag">Cepat Belajar</span>
+                            <span class="skill-tag">Cekatan & Adaptif</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="callout-banner">
+                    LET'S COLLABORATE!
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 8</div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SLIDE 9 (THANK YOU & CONTACT DETAILS)          -->
+        <!-- ============================================== -->
+        <div class="slide-card" onclick="openModal(9)">
+            <div class="hover-overlay">
+                <i class="fa-solid fa-expand"></i>
+                <span>Tampilkan Slide Utuh</span>
+            </div>
+            <div class="slide-9-content">
+                <div class="slide-9-left">
+                    <div class="slide-9-headline-box">
+                        <h2 class="slide-9-headline">Thank You</h2>
+                    </div>
+
+                    <div class="slide-9-contact-section">
+                        <div class="slide-9-subheadline">Contact Details</div>
+                        <div class="slide-9-contact-cards">
+                            <a href="https://www.linkedin.com/in/mariarosario99" target="_blank" class="slide-9-contact-link link-linkedin" title="Kunjungi Profil LinkedIn Maria Rosario" onclick="event.stopPropagation()">
+                                <div class="contact-icon-box">
+                                    <i class="fa-brands fa-linkedin-in"></i>
+                                </div>
+                                <div class="contact-info-box">
+                                    <span class="contact-platform">LinkedIn</span>
+                                    <span class="contact-value">linkedin.com/in/mariarosario99</span>
+                                </div>
+                                <i class="fa-solid fa-arrow-up-right-from-square contact-action-icon"></i>
+                            </a>
+
+                            <a href="mailto:maria.rosario44551@gmail.com" class="slide-9-contact-link link-email" title="Kirim Email ke Maria Rosario" onclick="event.stopPropagation()">
+                                <div class="contact-icon-box">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div class="contact-info-box">
+                                    <span class="contact-platform">Email</span>
+                                    <span class="contact-value">maria.rosario44551@gmail.com</span>
+                                </div>
+                                <i class="fa-solid fa-paper-plane contact-action-icon"></i>
+                            </a>
+
+                            <a href="https://wa.me/6287836023264" target="_blank" class="slide-9-contact-link link-whatsapp" title="Hubungi WhatsApp Maria Rosario" onclick="event.stopPropagation()">
+                                <div class="contact-icon-box">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <div class="contact-info-box">
+                                    <span class="contact-platform">WhatsApp</span>
+                                    <span class="contact-value">+62 878-3602-3264</span>
+                                </div>
+                                <i class="fa-solid fa-comment-dots contact-action-icon"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-9-right">
+                    <img src="maria_profile_new.jpg" alt="Maria Rosario - Professional Photo" class="slide-9-photo">
+                </div>
+            </div>
+            <div class="slide-badge">SLIDE 9</div>
+        </div>
+
+    </main>
+
+    <!-- ============================================== -->
+    <!-- FULL-SCREEN MODAL PRESENTATION VIEWER          -->
+    <!-- ============================================== -->
+    <div id="slideModal" class="modal-overlay" onclick="handleOverlayClick(event)">
+        <div class="modal-toolbar">
+            <div class="modal-counter">
+                <i class="fa-solid fa-sliders"></i> <span id="modalCounterText">Slide 1 dari 9</span>
+            </div>
+            <div class="modal-dots">
+                <button class="btn-dot" onclick="goToSlide(1)" title="Slide 1: Cover">1</button>
+                <button class="btn-dot" onclick="goToSlide(2)" title="Slide 2: About Me">2</button>
+                <button class="btn-dot" onclick="goToSlide(3)" title="Slide 3: Education & Experience">3</button>
+                <button class="btn-dot" onclick="goToSlide(4)" title="Slide 4: Roles - Samber Redjeki">4</button>
+                <button class="btn-dot" onclick="goToSlide(5)" title="Slide 5: Roles - Titi Jaya & Power Club">5</button>
+                <button class="btn-dot" onclick="goToSlide(6)" title="Slide 6: Professional Training">6</button>
+                <button class="btn-dot" onclick="goToSlide(7)" title="Slide 7: Certifications">7</button>
+                <button class="btn-dot" onclick="goToSlide(8)" title="Slide 8: Core Competencies">8</button>
+                <button class="btn-dot" onclick="goToSlide(9)" title="Slide 9: Thank You">9</button>
+            </div>
+            <div class="modal-controls">
+                <button class="btn-modal" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i> SEBELUMNYA</button>
+                <button class="btn-modal" onclick="nextSlide()">SELANJUTNYA <i class="fa-solid fa-chevron-right"></i></button>
+                <button class="btn-modal btn-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> TUTUP</button>
+            </div>
+        </div>
+
+        <button class="nav-arrow nav-arrow-left" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="nav-arrow nav-arrow-right" onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
+
+        <div id="modalSlideFrame" class="modal-slide-container">
+            <!-- Dynamic Slide Content Injected Here -->
+        </div>
+    </div>
+
+    <!-- Presentation Interactivity Scripts -->
+    <script>
+        let currentSlideIndex = 1;
+        const totalSlides = 9;
+        const modal = document.getElementById('slideModal');
+        const modalSlideFrame = document.getElementById('modalSlideFrame');
+        const modalCounterText = document.getElementById('modalCounterText');
+        const slideCards = document.querySelectorAll('.workspace-grid .slide-card');
+
+        function openModal(index) {
+            currentSlideIndex = index;
+            renderModalSlide();
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextSlide() {
+            currentSlideIndex = currentSlideIndex >= totalSlides ? 1 : currentSlideIndex + 1;
+            renderModalSlide();
+        }
+
+        function prevSlide() {
+            currentSlideIndex = currentSlideIndex <= 1 ? totalSlides : currentSlideIndex - 1;
+            renderModalSlide();
+        }
+
+        function goToSlide(index) {
+            currentSlideIndex = index;
+            renderModalSlide();
+        }
+
+        function renderModalSlide() {
+            const targetCard = slideCards[currentSlideIndex - 1];
+            // Clone node without the hover overlay and slide badge
+            const clone = targetCard.cloneNode(true);
+            
+            const overlay = clone.querySelector('.hover-overlay');
+            if (overlay) overlay.remove();
+            
+            const badge = clone.querySelector('.slide-badge');
+            if (badge) badge.remove();
+
+            // Clear frame and append cloned contents
+            modalSlideFrame.innerHTML = clone.innerHTML;
+            modalSlideFrame.setAttribute('data-slide', currentSlideIndex);
+            modalCounterText.textContent = `Slide ${currentSlideIndex} dari ${totalSlides}`;
+
+            // Update active dot in toolbar
+            document.querySelectorAll('.btn-dot').forEach((btn, idx) => {
+                if (idx + 1 === currentSlideIndex) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function handleOverlayClick(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Keyboard Navigation Support
+        document.addEventListener('keydown', function(e) {
+            if (modal.style.display === 'flex') {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'Escape') {
+                    closeModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
